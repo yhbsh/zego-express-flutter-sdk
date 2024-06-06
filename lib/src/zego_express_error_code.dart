@@ -360,8 +360,7 @@ class ZegoErrorCode {
   static const int PublisherErrorPublishWhenUsingMultiRoom = 1003070;
 
   /// Description: StartPlayingStream failed.<br>Caution: In multi-room mode, the publish-stream function is called incorrectly.<br>Solutions: In multi-room mode, A publish-stream function parameter 'roomID' cannot be empty.
-  static const int PublisherErrorPublishWithRoomIdIsNullWhenUsingMultiRoom =
-      1003071;
+  static const int PublisherErrorPublishWithRoomIdIsNullWhenUsingMultiRoom = 1003071;
 
   /// Description: Push-pull flow authentication is incorrect. <br>Caution: An [appSign] error was passed when creating the engine, or a Token error or timeout was passed when logging into the room. <br>Solutions: Pass the correct [Token] upon login, or invoke [renewToken] when recive [onRoomTokenWillExpire] callback.
   static const int PublisherErrorDispatchAuthError = 1003072;
@@ -427,8 +426,7 @@ class ZegoErrorCode {
   static const int PlayerErrorPlayStreamWhenUsingMultiRoom = 1004070;
 
   /// Description: In the multi-room mode, the roomID parameter of the play stream cannot be empty. <br>Cause: The roomID parameter of the pull stream is empty. <br>Solutions: Please enter the correct roomID.
-  static const int PlayerErrorPlayStreamWithRoomIdIsNullWhenUsingMultiRoom =
-      1004071;
+  static const int PlayerErrorPlayStreamWithRoomIdIsNullWhenUsingMultiRoom = 1004071;
 
   /// Description: When using the SDK to play the latency of live streaming, this error code will be returned if you have not subscribed to the low latency live streaming service. <br>Cause: Low-latency live broadcast service is not activated. <br>Solutions: Please contact ZEGO technical support staff to open the low-latency live broadcast service.
   static const int PlayerNotConfigL3 = 1004072;

@@ -51,8 +51,7 @@ extension ZegoExpressEngineMixer on ZegoExpressEngine {
   ///
   /// - [task] Auto mix stream task object
   /// - Returns Start auto mix stream task result callback notification
-  Future<ZegoMixerStartResult> startAutoMixerTask(
-      ZegoAutoMixerTask task) async {
+  Future<ZegoMixerStartResult> startAutoMixerTask(ZegoAutoMixerTask task) async {
     return await ZegoExpressImpl.instance.startAutoMixerTask(task);
   }
 

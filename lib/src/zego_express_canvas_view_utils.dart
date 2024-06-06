@@ -24,10 +24,8 @@ extension ZegoExpressCanvasViewUtils on ZegoExpressEngine {
   /// You should also listen to the [onViewCreated] callback, which will be
   /// called back when the canvas view has been created, then you can use
   /// the [viewID] to create a [ZegoCanvas] object for video rendering.
-  Future<Widget?> createCanvasView(Function(int viewID) onViewCreated,
-      {Key? key}) async {
-    return await ZegoExpressCanvasViewImpl.createCanvasView(onViewCreated,
-        key: key);
+  Future<Widget?> createCanvasView(Function(int viewID) onViewCreated, {Key? key}) async {
+    return await ZegoExpressCanvasViewImpl.createCanvasView(onViewCreated, key: key);
   }
 
   /// Destroy a canvas view.

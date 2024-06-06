@@ -25,9 +25,7 @@ extension ZegoExpressEngineCopyrightedMusic on ZegoExpressEngine {
   /// When to call: It can be called before the engine by [destroyEngine]
   ///
   /// - [copyrightedMusic] The copyrighted music instance object to be destroyed.
-  Future<void> destroyCopyrightedMusic(
-      ZegoCopyrightedMusic copyrightedMusic) async {
-    return await ZegoExpressImpl.instance
-        .destroyCopyrightedMusic(copyrightedMusic);
+  Future<void> destroyCopyrightedMusic(ZegoCopyrightedMusic copyrightedMusic) async {
+    return await ZegoExpressImpl.instance.destroyCopyrightedMusic(copyrightedMusic);
   }
 }

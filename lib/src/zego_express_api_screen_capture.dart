@@ -16,13 +16,8 @@ extension ZegoExpressEngineScreenCapture on ZegoExpressEngine {
   /// - [iconWidth] Get the width of the icon corresponding to the program. (unit is pixel)
   /// - [iconHeight] Get the height of the icon corresponding to the program. (unit is pixel)
   /// - Returns List of capture source info objects.
-  Future<List<ZegoScreenCaptureSourceInfo>> getScreenCaptureSources(
-      int thumbnailWidth,
-      int thumbnailHeight,
-      int iconWidth,
-      int iconHeight) async {
-    return await ZegoExpressImpl.instance.getScreenCaptureSources(
-        thumbnailWidth, thumbnailHeight, iconWidth, iconHeight);
+  Future<List<ZegoScreenCaptureSourceInfo>> getScreenCaptureSources(int thumbnailWidth, int thumbnailHeight, int iconWidth, int iconHeight) async {
+    return await ZegoExpressImpl.instance.getScreenCaptureSources(thumbnailWidth, thumbnailHeight, iconWidth, iconHeight);
   }
 
   /// Create the screen capture source
@@ -36,10 +31,8 @@ extension ZegoExpressEngineScreenCapture on ZegoExpressEngine {
   /// - [sourceId] The specified screen ID or window ID. Only macOS and windows platforms need to pass in this parameter.
   /// - [sourceType] The specified screen source type. Only macOS and windows platforms need to pass in this parameter.
   /// - Returns The screen capture instance, null will be returned when the maximum number is exceeded.
-  Future<ZegoScreenCaptureSource?> createScreenCaptureSource(
-      {int? sourceId, ZegoScreenCaptureSourceType? sourceType}) async {
-    return await ZegoExpressImpl.instance
-        .createScreenCaptureSource(sourceId: sourceId, sourceType: sourceType);
+  Future<ZegoScreenCaptureSource?> createScreenCaptureSource({int? sourceId, ZegoScreenCaptureSourceType? sourceType}) async {
+    return await ZegoExpressImpl.instance.createScreenCaptureSource(sourceId: sourceId, sourceType: sourceType);
   }
 
   /// Destroy the screen capture source instance
@@ -52,8 +45,7 @@ extension ZegoExpressEngineScreenCapture on ZegoExpressEngine {
   /// Platform differences: Only supports Windows and macOS.
   ///
   /// - [source] The screen capture source instance to be destroyed.
-  Future<void> destroyScreenCaptureSource(
-      ZegoScreenCaptureSource source) async {
+  Future<void> destroyScreenCaptureSource(ZegoScreenCaptureSource source) async {
     return await ZegoExpressImpl.instance.destroyScreenCaptureSource(source);
   }
 }

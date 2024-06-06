@@ -4,8 +4,7 @@ import '../utils/zego_express_utils.dart';
 /// Native implementation of [createPlatformView]
 class ZegoExpressPlatformViewImpl {
   /// Create a PlatformView and return the view ID
-  static Widget? createPlatformView(Function(int viewID) onViewCreated,
-      {Key? key}) {
+  static Widget? createPlatformView(Function(int viewID) onViewCreated, {Key? key}) {
     if (kIsIOS || kIsMacOS) {
       return UiKitView(
           key: key,

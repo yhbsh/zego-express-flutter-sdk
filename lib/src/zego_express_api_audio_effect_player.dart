@@ -28,9 +28,7 @@ extension ZegoExpressEngineAudioEffectPlayer on ZegoExpressEngine {
   /// Related APIs: [createAudioEffectPlayer].
   ///
   /// - [audioEffectPlayer] The audio effect player instance object to be destroyed.
-  Future<void> destroyAudioEffectPlayer(
-      ZegoAudioEffectPlayer audioEffectPlayer) async {
-    return await ZegoExpressImpl.instance
-        .destroyAudioEffectPlayer(audioEffectPlayer);
+  Future<void> destroyAudioEffectPlayer(ZegoAudioEffectPlayer audioEffectPlayer) async {
+    return await ZegoExpressImpl.instance.destroyAudioEffectPlayer(audioEffectPlayer);
   }
 }

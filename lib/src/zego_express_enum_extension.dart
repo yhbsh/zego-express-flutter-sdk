@@ -234,8 +234,7 @@ extension ZegoVideoSourceTypeExtension on ZegoVideoSourceType {
   }
 }
 
-extension ZegoCopyrightedMusicVendorIDExtension
-    on ZegoCopyrightedMusicVendorID {
+extension ZegoCopyrightedMusicVendorIDExtension on ZegoCopyrightedMusicVendorID {
   int get value {
     switch (this) {
       case ZegoCopyrightedMusicVendorID.ZegoCopyrightedMusicVendorDefault:

@@ -33,16 +33,13 @@ class _QuickStartPageState extends State<QuickStartPage> {
   ZegoPublisherState _publisherState = ZegoPublisherState.NoPublish;
   ZegoPlayerState _playerState = ZegoPlayerState.NoPlay;
 
-  TextEditingController _publishingStreamIDController =
-      new TextEditingController();
-  TextEditingController _playingStreamIDController =
-      new TextEditingController();
+  TextEditingController _publishingStreamIDController = new TextEditingController();
+  TextEditingController _playingStreamIDController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    ZegoExpressEngine.getVersion()
-        .then((value) => print('🌞 SDK Version: $value'));
+    ZegoExpressEngine.getVersion().then((value) => print('🌞 SDK Version: $value'));
 
     setZegoEventCallback();
   }
@@ -52,8 +49,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
     // Can destroy the engine when you don't need audio and video calls
     //
     // Destroy engine will automatically logout room and stop publishing/playing stream.
-    ZegoExpressEngine.destroyEngine()
-        .then((value) => print('async destroy success'));
+    ZegoExpressEngine.destroyEngine().then((value) => print('async destroy success'));
 
     print('🏳️ Destroy ZegoExpressEngine');
 
@@ -65,10 +61,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
   // MARK: - Step 1: CreateEngine
 
   void createEngine() {
-    ZegoEngineProfile profile = ZegoEngineProfile(
-        ZegoConfig.instance.appID, ZegoConfig.instance.scenario,
-        enablePlatformView: ZegoConfig.instance.enablePlatformView,
-        appSign: ZegoConfig.instance.appSign);
+    ZegoEngineProfile profile = ZegoEngineProfile(ZegoConfig.instance.appID, ZegoConfig.instance.scenario, enablePlatformView: ZegoConfig.instance.enablePlatformView, appSign: ZegoConfig.instance.appSign);
     if (kIsWeb) {
       profile.appSign = null; // Don't use appsign on web
     }
@@ -84,11 +77,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
 
   void loginRoom() {
     // Instantiate a ZegoUser object
-    ZegoUser user = ZegoUser(
-        ZegoConfig.instance.userID,
-        ZegoConfig.instance.userName.isEmpty
-            ? ZegoConfig.instance.userID
-            : ZegoConfig.instance.userName);
+    ZegoUser user = ZegoUser(ZegoConfig.instance.userID, ZegoConfig.instance.userName.isEmpty ? ZegoConfig.instance.userID : ZegoConfig.instance.userName);
 
     if (kIsWeb) {
       ZegoRoomConfig config = ZegoRoomConfig.defaultConfig();
@@ -123,11 +112,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
       print('🔌 Start preview, viewID: $viewID');
     }
 
-    if (Platform.isIOS ||
-        Platform.isAndroid ||
-        Platform.isWindows ||
-        Platform.isMacOS ||
-        kIsWeb) {
+    if (Platform.isIOS || Platform.isAndroid || Platform.isWindows || Platform.isMacOS || kIsWeb) {
       ZegoExpressEngine.instance.createCanvasView((viewID) {
         _previewViewID = viewID;
         _startPreview(viewID);
@@ -142,10 +127,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
   }
 
   void stopPreview() {
-    if (!Platform.isAndroid &&
-        !Platform.isIOS &&
-        !Platform.isMacOS &&
-        !kIsWeb) {
+    if (!Platform.isAndroid && !Platform.isIOS && !Platform.isMacOS && !kIsWeb) {
       return;
     }
 
@@ -175,11 +157,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
       print('📥 Start playing stream, streamID: $streamID, viewID: $viewID');
     }
 
-    if (Platform.isIOS ||
-        Platform.isAndroid ||
-        Platform.isWindows ||
-        Platform.isMacOS ||
-        kIsWeb) {
+    if (Platform.isIOS || Platform.isAndroid || Platform.isWindows || Platform.isMacOS || kIsWeb) {
       print('📥 Start playing stream, streamID');
       ZegoExpressEngine.instance.createCanvasView((viewID) {
         _playViewID = viewID;
@@ -210,8 +188,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
     // Can destroy the engine when you don't need audio and video calls
     //
     // Destroy engine will automatically logout room and stop publishing/playing stream.
-    ZegoExpressEngine.destroyEngine()
-        .then((ret) => print('already destroy engine'));
+    ZegoExpressEngine.destroyEngine().then((ret) => print('already destroy engine'));
 
     print('🏳️ Destroy ZegoExpressEngine');
 
@@ -227,28 +204,18 @@ class _QuickStartPageState extends State<QuickStartPage> {
   // MARK: - Zego Event
 
   void setZegoEventCallback() {
-    ZegoExpressEngine.onRoomStateUpdate = (String roomID, ZegoRoomState state,
-        int errorCode, Map<String, dynamic> extendedData) {
-      print(
-          '🚩 🚪 Room state update, state: $state, errorCode: $errorCode, roomID: $roomID');
+    ZegoExpressEngine.onRoomStateUpdate = (String roomID, ZegoRoomState state, int errorCode, Map<String, dynamic> extendedData) {
+      print('🚩 🚪 Room state update, state: $state, errorCode: $errorCode, roomID: $roomID');
       setState(() => _roomState = state);
     };
 
-    ZegoExpressEngine.onPublisherStateUpdate = (String streamID,
-        ZegoPublisherState state,
-        int errorCode,
-        Map<String, dynamic> extendedData) {
-      print(
-          '🚩 📤 Publisher state update, state: $state, errorCode: $errorCode, streamID: $streamID');
+    ZegoExpressEngine.onPublisherStateUpdate = (String streamID, ZegoPublisherState state, int errorCode, Map<String, dynamic> extendedData) {
+      print('🚩 📤 Publisher state update, state: $state, errorCode: $errorCode, streamID: $streamID');
       setState(() => _publisherState = state);
     };
 
-    ZegoExpressEngine.onPlayerStateUpdate = (String streamID,
-        ZegoPlayerState state,
-        int errorCode,
-        Map<String, dynamic> extendedData) {
-      print(
-          '🚩 📥 Player state update, state: $state, errorCode: $errorCode, streamID: $streamID');
+    ZegoExpressEngine.onPlayerStateUpdate = (String streamID, ZegoPlayerState state, int errorCode, Map<String, dynamic> extendedData) {
+      print('🚩 📥 Player state update, state: $state, errorCode: $errorCode, streamID: $streamID');
       setState(() => _playerState = state);
     };
 
@@ -256,17 +223,14 @@ class _QuickStartPageState extends State<QuickStartPage> {
       userList.forEach((e) {
         var userID = e.userID;
         var userName = e.userName;
-        print(
-            '🚩 🚪 Room user update, roomID: $roomID, updateType: $updateType userID: $userID userName: $userName');
+        print('🚩 🚪 Room user update, roomID: $roomID, updateType: $updateType userID: $userID userName: $userName');
       });
     };
 
-    ZegoExpressEngine.onRoomStreamUpdate =
-        ((roomID, updateType, streamList, extendedData) {
+    ZegoExpressEngine.onRoomStreamUpdate = ((roomID, updateType, streamList, extendedData) {
       streamList.forEach((stream) {
         var streamID = stream.streamID;
-        print(
-            '🚩 🚪 Room stream update, roomID: $roomID, updateType: $updateType streamID:$streamID');
+        print('🚩 🚪 Room stream update, roomID: $roomID, updateType: $updateType streamID:$streamID');
 
         if (updateType == ZegoPlayerState.NoPlay) {
           stopPlayingStream(_playingStreamIDController.text.trim());
@@ -282,11 +246,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
   }
 
   void clearPreviewView() {
-    if (!Platform.isAndroid &&
-        !Platform.isIOS &&
-        !Platform.isMacOS &&
-        !Platform.isWindows &&
-        !kIsWeb) {
+    if (!Platform.isAndroid && !Platform.isIOS && !Platform.isMacOS && !Platform.isWindows && !kIsWeb) {
       return;
     }
 
@@ -301,11 +261,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
   }
 
   void clearPlayView() {
-    if (!Platform.isAndroid &&
-        !Platform.isIOS &&
-        !Platform.isMacOS &&
-        !Platform.isWindows &&
-        !kIsWeb) {
+    if (!Platform.isAndroid && !Platform.isIOS && !Platform.isMacOS && !Platform.isWindows && !kIsWeb) {
       return;
     }
 
@@ -402,8 +358,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
         Row(children: [
           Column(
             children: [
-              Text('AppID: ${ZegoConfig.instance.appID}',
-                  style: TextStyle(fontSize: 10)),
+              Text('AppID: ${ZegoConfig.instance.appID}', style: TextStyle(fontSize: 10)),
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),
@@ -435,8 +390,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
         Column(
           children: [
             Text('RoomID: $_roomID', style: TextStyle(fontSize: 10)),
-            Text('UserID: ${ZegoConfig.instance.userID}',
-                style: TextStyle(fontSize: 10)),
+            Text('UserID: ${ZegoConfig.instance.userID}', style: TextStyle(fontSize: 10)),
           ],
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
@@ -445,14 +399,10 @@ class _QuickStartPageState extends State<QuickStartPage> {
           width: MediaQuery.of(context).size.width / 2.5,
           child: CupertinoButton.filled(
             child: Text(
-              _roomState == ZegoRoomState.Connected
-                  ? '✅ LoginRoom'
-                  : 'LoginRoom',
+              _roomState == ZegoRoomState.Connected ? '✅ LoginRoom' : 'LoginRoom',
               style: TextStyle(fontSize: 14.0),
             ),
-            onPressed: _roomState == ZegoRoomState.Disconnected
-                ? loginRoom
-                : logoutRoom,
+            onPressed: _roomState == ZegoRoomState.Disconnected ? loginRoom : logoutRoom,
             padding: EdgeInsets.all(10.0),
           ),
         )
@@ -480,10 +430,8 @@ class _QuickStartPageState extends State<QuickStartPage> {
                 labelStyle: TextStyle(color: Colors.black54, fontSize: 14.0),
                 hintText: 'Please enter streamID',
                 hintStyle: TextStyle(color: Colors.black26, fontSize: 10.0),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0e88eb)))),
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff0e88eb)))),
           ),
         ),
         Spacer(),
@@ -509,15 +457,12 @@ class _QuickStartPageState extends State<QuickStartPage> {
           width: MediaQuery.of(context).size.width / 5,
           child: CupertinoButton.filled(
             child: Text(
-              _publisherState == ZegoPublisherState.Publishing
-                  ? '✅ StartPublishing'
-                  : 'StartPublishing',
+              _publisherState == ZegoPublisherState.Publishing ? '✅ StartPublishing' : 'StartPublishing',
               style: TextStyle(fontSize: 14.0),
             ),
             onPressed: _publisherState == ZegoPublisherState.NoPublish
                 ? () {
-                    startPublishingStream(
-                        _publishingStreamIDController.text.trim());
+                    startPublishingStream(_publishingStreamIDController.text.trim());
                   }
                 : () {
                     stopPublishingStream();
@@ -549,10 +494,8 @@ class _QuickStartPageState extends State<QuickStartPage> {
                 labelStyle: TextStyle(color: Colors.black54, fontSize: 14.0),
                 hintText: 'Please enter streamID',
                 hintStyle: TextStyle(color: Colors.black26, fontSize: 10.0),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff0e88eb)))),
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xff0e88eb)))),
           ),
         ),
         Spacer(),
@@ -560,9 +503,7 @@ class _QuickStartPageState extends State<QuickStartPage> {
           width: MediaQuery.of(context).size.width / 2.5,
           child: CupertinoButton.filled(
             child: Text(
-              _playerState == ZegoPlayerState.Playing
-                  ? '✅ StartPlaying'
-                  : 'StartPlaying',
+              _playerState == ZegoPlayerState.Playing ? '✅ StartPlaying' : 'StartPlaying',
               style: TextStyle(fontSize: 14.0),
             ),
             onPressed: _playerState == ZegoPlayerState.NoPlay

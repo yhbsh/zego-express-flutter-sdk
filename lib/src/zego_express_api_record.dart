@@ -15,10 +15,8 @@ extension ZegoExpressEngineRecord on ZegoExpressEngine {
   ///
   /// - [config] Record config.
   /// - [channel] Publishing stream channel.
-  Future<void> startRecordingCapturedData(ZegoDataRecordConfig config,
-      {ZegoPublishChannel? channel}) async {
-    return await ZegoExpressImpl.instance
-        .startRecordingCapturedData(config, channel: channel);
+  Future<void> startRecordingCapturedData(ZegoDataRecordConfig config, {ZegoPublishChannel? channel}) async {
+    return await ZegoExpressImpl.instance.startRecordingCapturedData(config, channel: channel);
   }
 
   /// Stops recording locally captured audio or video.
@@ -30,7 +28,6 @@ extension ZegoExpressEngineRecord on ZegoExpressEngine {
   ///
   /// - [channel] Publishing stream channel.
   Future<void> stopRecordingCapturedData({ZegoPublishChannel? channel}) async {
-    return await ZegoExpressImpl.instance
-        .stopRecordingCapturedData(channel: channel);
+    return await ZegoExpressImpl.instance.stopRecordingCapturedData(channel: channel);
   }
 }

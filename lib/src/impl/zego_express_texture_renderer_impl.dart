@@ -14,10 +14,7 @@ class ZegoExpressTextureRenderer {
 
   void init() async {
     if (!kIsWeb && !kIsAndroid) {
-      _streamSubscriptionTextureRendererController ??=
-          _textureRendererControllerEvent
-              .receiveBroadcastStream()
-              .listen(_textureRendererControllerEventListener);
+      _streamSubscriptionTextureRendererController ??= _textureRendererControllerEvent.receiveBroadcastStream().listen(_textureRendererControllerEventListener);
     }
   }
 
@@ -34,8 +31,7 @@ class ZegoExpressTextureRenderer {
 
   /// Create a Texture renderer and return the texture ID
   Future<int> createTextureRenderer(int width, int height) async {
-    final int textureID = await ZegoExpressImpl.methodChannel.invokeMethod(
-        'createTextureRenderer', {'width': width, 'height': height});
+    final int textureID = await ZegoExpressImpl.methodChannel.invokeMethod('createTextureRenderer', {'width': width, 'height': height});
 
     return textureID;
   }
@@ -43,12 +39,9 @@ class ZegoExpressTextureRenderer {
   /// Update the size of the Texture renderer
   /// If it returns false, it's probably because the `textureID` to be updated doesn't exist.
   /// Note: Only used by Android!
-  Future<bool> updateTextureRendererSize(
-      int textureID, int width, int height) async {
+  Future<bool> updateTextureRendererSize(int textureID, int width, int height) async {
     if (kIsAndroid) {
-      return await ZegoExpressImpl.methodChannel.invokeMethod(
-          'updateTextureRendererSize',
-          {'textureID': textureID, 'width': width, 'height': height});
+      return await ZegoExpressImpl.methodChannel.invokeMethod('updateTextureRendererSize', {'textureID': textureID, 'width': width, 'height': height});
     } else {
       return true;
     }
@@ -57,13 +50,11 @@ class ZegoExpressTextureRenderer {
   /// Destroys the Texture renderer and releases its resources
   /// If it returns false, it's probably because the `textureID` to be destroyed doesn't exist.
   Future<bool> destroyTextureRenderer(int textureID) async {
-    return await ZegoExpressImpl.methodChannel
-        .invokeMethod('destroyTextureRenderer', {'textureID': textureID});
+    return await ZegoExpressImpl.methodChannel.invokeMethod('destroyTextureRenderer', {'textureID': textureID});
   }
 
   void setViewMode(int textureID, ZegoViewMode viewMode) {
-    if (_viewModeMap.containsKey(textureID) &&
-        _viewModeMap[textureID] != viewMode) {
+    if (_viewModeMap.containsKey(textureID) && _viewModeMap[textureID] != viewMode) {
       _updateController.sink.add({
         'textureID': textureID,
         'type': 'update',
@@ -72,8 +63,7 @@ class ZegoExpressTextureRenderer {
     _viewModeMap[textureID] = viewMode;
   }
 
-  void setBackgroundColor(int textureID, int backgroundColor,
-      {bool hasAlpha = false}) {
+  void setBackgroundColor(int textureID, int backgroundColor, {bool hasAlpha = false}) {
     if (hasAlpha) {
       _backgroundColorMap[textureID] = Color(backgroundColor);
     } else {
@@ -112,11 +102,9 @@ class ZegoExpressTextureRenderer {
       switch (map['type']) {
         case 'update':
           int textureID = map['textureID'];
-          _sizeMap[textureID] = Size(double.parse(map['width'].toString()),
-              double.parse(map['height'].toString()));
+          _sizeMap[textureID] = Size(double.parse(map['width'].toString()), double.parse(map['height'].toString()));
           _mirrorMap[textureID] = map['isMirror'];
-          _updateController.sink
-              .add({'textureID': textureID, 'type': 'update'});
+          _updateController.sink.add({'textureID': textureID, 'type': 'update'});
       }
     }
 
@@ -124,30 +112,21 @@ class ZegoExpressTextureRenderer {
   }
 
   ZegoExpressTextureRenderer._();
-  static final ZegoExpressTextureRenderer _instance =
-      ZegoExpressTextureRenderer._();
+  static final ZegoExpressTextureRenderer _instance = ZegoExpressTextureRenderer._();
 
   static final Map<int, ZegoViewMode> _viewModeMap = {};
   static final Map<int, Color> _backgroundColorMap = {};
   static final Map<int, Size> _sizeMap = {};
   static final Map<int, int?> _mirrorMap = {};
 
-  static final StreamController<Map<String, dynamic>> _updateController =
-      StreamController<Map<String, dynamic>>.broadcast();
+  static final StreamController<Map<String, dynamic>> _updateController = StreamController<Map<String, dynamic>>.broadcast();
 
-  static const EventChannel _textureRendererControllerEvent = EventChannel(
-      'plugins.zego.im/zego_texture_renderer_controller_event_handler');
-  static StreamSubscription<dynamic>?
-      _streamSubscriptionTextureRendererController;
+  static const EventChannel _textureRendererControllerEvent = EventChannel('plugins.zego.im/zego_texture_renderer_controller_event_handler');
+  static StreamSubscription<dynamic>? _streamSubscriptionTextureRendererController;
 }
 
 class ZegoTextureWidget extends StatefulWidget {
-  const ZegoTextureWidget(
-      {Key? key,
-      required this.textureID,
-      required this.stream,
-      required this.updateTextureRendererSize})
-      : super(key: key);
+  const ZegoTextureWidget({Key? key, required this.textureID, required this.stream, required this.updateTextureRendererSize}) : super(key: key);
 
   final int textureID;
 
@@ -201,9 +180,7 @@ class _ZegoTextureWidgetState extends State<ZegoTextureWidget> {
 
     Size? size = ZegoExpressTextureRenderer().getSize(widget.textureID);
     if (size != null && size.width > 0.0 && size.height > 0.0) {
-      var viewMode =
-          ZegoExpressTextureRenderer().getViewMode(widget.textureID) ??
-              ZegoViewMode.AspectFit;
+      var viewMode = ZegoExpressTextureRenderer().getViewMode(widget.textureID) ?? ZegoViewMode.AspectFit;
 
       switch (viewMode) {
         case ZegoViewMode.AspectFit:
@@ -219,10 +196,7 @@ class _ZegoTextureWidgetState extends State<ZegoTextureWidget> {
                 rect = _calculateHeight(size, width, height);
               }
             }
-            widget.updateTextureRendererSize(
-                widget.textureID,
-                (rect.width * pixelRatio).toInt(),
-                (rect.height * pixelRatio).toInt());
+            widget.updateTextureRendererSize(widget.textureID, (rect.width * pixelRatio).toInt(), (rect.height * pixelRatio).toInt());
           }
           break;
         case ZegoViewMode.AspectFill:
@@ -238,18 +212,14 @@ class _ZegoTextureWidgetState extends State<ZegoTextureWidget> {
                 rect = _calculateWidth(size, width, height);
               }
             }
-            widget.updateTextureRendererSize(
-                widget.textureID,
-                (rect.width * pixelRatio).toInt(),
-                (rect.height * pixelRatio).toInt());
+            widget.updateTextureRendererSize(widget.textureID, (rect.width * pixelRatio).toInt(), (rect.height * pixelRatio).toInt());
           }
           break;
         case ZegoViewMode.ScaleToFill:
           break;
       }
     } else {
-      widget.updateTextureRendererSize(widget.textureID,
-          (width * pixelRatio).toInt(), (height * pixelRatio).toInt());
+      widget.updateTextureRendererSize(widget.textureID, (width * pixelRatio).toInt(), (height * pixelRatio).toInt());
     }
     return rect;
   }
@@ -258,16 +228,13 @@ class _ZegoTextureWidgetState extends State<ZegoTextureWidget> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: ((context, constraints) {
       // Calculate the scaled size
-      var rect = _viewModeCalculate(
-          constraints.biggest.width, constraints.biggest.height);
+      var rect = _viewModeCalculate(constraints.biggest.width, constraints.biggest.height);
       var textureWidth = rect.width;
       var textureHeight = rect.height;
       var x = rect.left;
       var y = rect.top;
 
-      var backgroundColor =
-          ZegoExpressTextureRenderer().getBackgroundColor(widget.textureID) ??
-              Colors.black;
+      var backgroundColor = ZegoExpressTextureRenderer().getBackgroundColor(widget.textureID) ?? Colors.black;
 
       Widget child = Texture(
         textureId: widget.textureID,
