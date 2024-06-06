@@ -1,36 +1,34 @@
 #import "ZegoExpressEnginePlugin.h"
 #import <ZegoExpressEngine/ZegoExpressEngine.h>
 
-#import "ZegoExpressEngineMethodHandler.h"
 #import "ZegoExpressEngineEventHandler.h"
+#import "ZegoExpressEngineMethodHandler.h"
 
 #import "ZegoPlatformViewFactory.h"
 #import "ZegoTextureRendererController.h"
 
 #import "ZegoLog.h"
 
-@interface ZegoExpressEnginePlugin() <FlutterStreamHandler, UIApplicationDelegate>
+@interface ZegoExpressEnginePlugin () <FlutterStreamHandler, UIApplicationDelegate>
 
-@property (nonatomic, strong) id<FlutterPluginRegistrar> registrar;
+@property(nonatomic, strong) id<FlutterPluginRegistrar> registrar;
 
-@property (nonatomic, strong) FlutterMethodChannel *methodChannel;
-@property (nonatomic, strong) FlutterEventChannel *eventChannel;
+@property(nonatomic, strong) FlutterMethodChannel *methodChannel;
+@property(nonatomic, strong) FlutterEventChannel  *eventChannel;
 
-@property (nonatomic, strong) FlutterEventSink eventSink;
+@property(nonatomic, strong) FlutterEventSink eventSink;
 
 @end
 
 @implementation ZegoExpressEnginePlugin
 
-+ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
 
     ZegoExpressEnginePlugin *instance = [[ZegoExpressEnginePlugin alloc] init];
 
     instance.registrar = registrar;
 
-    FlutterMethodChannel *methodChannel = [FlutterMethodChannel
-      methodChannelWithName:@"plugins.zego.im/zego_express_engine"
-            binaryMessenger:[registrar messenger]];
+    FlutterMethodChannel *methodChannel = [FlutterMethodChannel methodChannelWithName:@"plugins.zego.im/zego_express_engine" binaryMessenger:[registrar messenger]];
     [registrar addMethodCallDelegate:instance channel:methodChannel];
     instance.methodChannel = methodChannel;
 
@@ -43,12 +41,12 @@
 
     // init api called callback
     [[ZegoExpressEngineMethodHandler sharedInstance] initApiCalledCallback];
-    
+
     // registrar add ApplicationDelegate
     [registrar addApplicationDelegate:instance];
 }
 
-- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
     [[ZegoExpressEngineMethodHandler sharedInstance] unInit];
 }
 
@@ -72,8 +70,7 @@
  *     successful events.
  * @return A FlutterError instance, if setup fails.
  */
-- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
-                                       eventSink:(FlutterEventSink)events {
+- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)events {
     self.eventSink = events;
     ZGLog(@"[FlutterEventSink] [onListen] set eventSink: %p", _eventSink);
     return nil;
@@ -92,7 +89,7 @@
  * @param arguments Arguments for the stream.
  * @return A FlutterError instance, if teardown fails.
  */
-- (FlutterError* _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
     ZGLog(@"[FlutterEventSink] [onCancel] set eventSink: %p to nil", _eventSink);
     self.eventSink = nil;
     return nil;
@@ -100,7 +97,7 @@
 
 #pragma mark - Handle Method Call
 
-- (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
+- (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
     if ([call.method hasPrefix:@"createEngine"]) {
         [[ZegoExpressEngineMethodHandler sharedInstance] setRegistrar:_registrar eventSink:_eventSink];
     }

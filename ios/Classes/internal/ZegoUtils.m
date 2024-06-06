@@ -11,17 +11,17 @@
 @implementation ZegoUtils
 
 + (BOOL)boolValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? NO : [number boolValue];
 }
 
 + (int)intValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? 0 : [number intValue];
 }
 
 + (unsigned int)unsignedIntValue:(NSNumber *)number {
-   
+
     return [number isKindOfClass:[NSNull class]] ? 0 : [number unsignedIntValue];
 }
 
@@ -30,7 +30,7 @@
 }
 
 + (unsigned long)unsignedLongValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? 0 : [number unsignedLongValue];
 }
 
@@ -40,17 +40,17 @@
 }
 
 + (long long)longLongValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? 0 : [number longLongValue];
 }
 
 + (float)floatValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? 0.f : [number floatValue];
 }
 
 + (double)doubleValue:(NSNumber *)number {
-    
+
     return [number isKindOfClass:[NSNull class]] ? 0.0 : [number doubleValue];
 }
 

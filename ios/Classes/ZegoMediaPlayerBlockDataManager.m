@@ -9,9 +9,9 @@
 #import "ZegoLog.h"
 #import <ZegoExpressEngine/ZegoExpressEngine.h>
 
-@interface ZegoMediaPlayerBlockDataManager() <ZegoMediaPlayerBlockDataHandler>
+@interface ZegoMediaPlayerBlockDataManager () <ZegoMediaPlayerBlockDataHandler>
 
-@property (nonatomic, weak) id<ZegoFlutterMediaPlayerBlockDataHandler> handler;
+@property(nonatomic, weak) id<ZegoFlutterMediaPlayerBlockDataHandler> handler;
 
 @end
 
@@ -19,9 +19,9 @@
 
 + (instancetype)sharedInstance {
     static ZegoMediaPlayerBlockDataManager *instance = nil;
-    static dispatch_once_t onceToken;
+    static dispatch_once_t                  onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[ZegoMediaPlayerBlockDataManager alloc] init];
+      instance = [[ZegoMediaPlayerBlockDataManager alloc] init];
     });
     return instance;
 }

@@ -18,16 +18,27 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZegoExpressEngineEventHandler : NSObject<ZegoEventHandler, ZegoMediaPlayerEventHandler, ZegoAudioEffectPlayerEventHandler, ZegoMediaDataPublisherEventHandler, ZegoDataRecordEventHandler, ZegoAudioDataHandler, ZegoRangeAudioEventHandler, ZegoCustomAudioProcessHandler, ZegoApiCalledEventHandler, ZegoRealTimeSequentialDataEventHandler, ZegoCopyrightedMusicEventHandler
+@interface ZegoExpressEngineEventHandler : NSObject <ZegoEventHandler,
+                                                     ZegoMediaPlayerEventHandler,
+                                                     ZegoAudioEffectPlayerEventHandler,
+                                                     ZegoMediaDataPublisherEventHandler,
+                                                     ZegoDataRecordEventHandler,
+                                                     ZegoAudioDataHandler,
+                                                     ZegoRangeAudioEventHandler,
+                                                     ZegoCustomAudioProcessHandler,
+                                                     ZegoApiCalledEventHandler,
+                                                     ZegoRealTimeSequentialDataEventHandler,
+                                                     ZegoCopyrightedMusicEventHandler
 #if TARGET_OS_OSX
-    ,ZegoScreenCaptureSourceEventHandler
+                                                     ,
+                                                     ZegoScreenCaptureSourceEventHandler
 #endif
-    ,ZegoAIVoiceChangerEventHandler
->
+                                                     ,
+                                                     ZegoAIVoiceChangerEventHandler>
 
 + (instancetype)sharedInstance;
 
-@property (nonatomic, strong, nullable) FlutterEventSink eventSink;
+@property(nonatomic, strong, nullable) FlutterEventSink eventSink;
 
 @end
 

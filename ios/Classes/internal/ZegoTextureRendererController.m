@@ -13,25 +13,25 @@
 @interface ZegoTextureRendererController () <FlutterStreamHandler>
 
 // BufferRenderers for caching, the renderer created will not be immediately added to the renderers dictionary, but the developer will need to explicitly bind the relationship
-@property (strong) NSMutableDictionary<NSNumber *, ZegoTextureRenderer *> *renderers;
+@property(strong) NSMutableDictionary<NSNumber *, ZegoTextureRenderer *> *renderers;
 
-@property (strong) NSMutableDictionary<NSNumber *, NSNumber *> *capturedTextureIdMap;
-@property (strong) NSMutableDictionary<NSString *, NSNumber *> *remoteTextureIdMap;
-@property (strong) NSMutableDictionary<NSNumber *, NSNumber *> *mediaPlayerTextureIdMap;
+@property(strong) NSMutableDictionary<NSNumber *, NSNumber *> *capturedTextureIdMap;
+@property(strong) NSMutableDictionary<NSString *, NSNumber *> *remoteTextureIdMap;
+@property(strong) NSMutableDictionary<NSNumber *, NSNumber *> *mediaPlayerTextureIdMap;
 
-@property (strong) NSMutableDictionary<NSNumber *, NSNumber *> *alphaTextureIdMap;
+@property(strong) NSMutableDictionary<NSNumber *, NSNumber *> *alphaTextureIdMap;
 
-@property (strong) NSMutableDictionary<NSNumber *, NSNumber *> *videoSourceChannelMap;
+@property(strong) NSMutableDictionary<NSNumber *, NSNumber *> *videoSourceChannelMap;
 
-@property (nonatomic, assign) BOOL isInited;
+@property(nonatomic, assign) BOOL isInited;
 
-@property (nonatomic, strong) FlutterEventSink eventSink;
+@property(nonatomic, strong) FlutterEventSink eventSink;
 
-@property (nonatomic, assign) BOOL isAppEnterBackground;
+@property(nonatomic, assign) BOOL isAppEnterBackground;
 
-@property (nonatomic, weak) id<ZegoFlutterCustomVideoRenderHandler> renderHandler;
+@property(nonatomic, weak) id<ZegoFlutterCustomVideoRenderHandler> renderHandler;
 
-@property (nonatomic, weak) id<ZegoFlutterMediaPlayerVideoHandler> mediaPlayerVideoHandler;
+@property(nonatomic, weak) id<ZegoFlutterMediaPlayerVideoHandler> mediaPlayerVideoHandler;
 
 @end
 
@@ -39,7 +39,7 @@
 
 + (instancetype)sharedInstance {
     static ZegoTextureRendererController *instance = nil;
-    static dispatch_once_t onceToken;
+    static dispatch_once_t                onceToken;
     dispatch_once(&onceToken, ^{
       instance = [[ZegoTextureRendererController alloc] init];
     });
@@ -47,17 +47,17 @@
 }
 
 - (instancetype)init {
-    self = [super init];
+    self                      = [super init];
     self.isAppEnterBackground = NO;
     if (self) {
-        _renderers = [NSMutableDictionary dictionary];
-        _capturedTextureIdMap = [NSMutableDictionary dictionary];
-        _remoteTextureIdMap = [NSMutableDictionary dictionary];
+        _renderers               = [NSMutableDictionary dictionary];
+        _capturedTextureIdMap    = [NSMutableDictionary dictionary];
+        _remoteTextureIdMap      = [NSMutableDictionary dictionary];
         _mediaPlayerTextureIdMap = [NSMutableDictionary dictionary];
-        _alphaTextureIdMap = [NSMutableDictionary dictionary];
-        _videoSourceChannelMap = [NSMutableDictionary dictionary];
-        _renderHandler = nil;
-        
+        _alphaTextureIdMap       = [NSMutableDictionary dictionary];
+        _videoSourceChannelMap   = [NSMutableDictionary dictionary];
+        _renderHandler           = nil;
+
 #if TARGET_OS_IPHONE
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -66,14 +66,14 @@
     return self;
 }
 
--(void)applicationDidEnterBackground:(NSNotification *)notification {
-    @synchronized (self) {
+- (void)applicationDidEnterBackground:(NSNotification *)notification {
+    @synchronized(self) {
         self.isAppEnterBackground = YES;
     }
 }
 
--(void)applicationWillEnterForeground:(NSNotification *)notification {
-    @synchronized (self) {
+- (void)applicationWillEnterForeground:(NSNotification *)notification {
+    @synchronized(self) {
         self.isAppEnterBackground = NO;
     }
 }
@@ -82,16 +82,13 @@
 
 /// The following methods are only triggered by the dart `zego_texture_render_utils`
 
-- (int64_t)createTextureRenderer:(id<FlutterTextureRegistry>)registry
-                       viewWidth:(int)width
-                      viewHeight:(int)height {
+- (int64_t)createTextureRenderer:(id<FlutterTextureRegistry>)registry viewWidth:(int)width viewHeight:(int)height {
 
     ZegoTextureRenderer *renderer = [[ZegoTextureRenderer alloc] initWithTextureRegistry:registry size:CGSizeMake(width, height)];
 
-    ZGLog(@"[createTextureRenderer] textureID:%ld, renderer:%p", (long)renderer.textureID,
-          renderer);
+    ZGLog(@"[createTextureRenderer] textureID:%ld, renderer:%p", (long) renderer.textureID, renderer);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.renderers setObject:renderer forKey:@(renderer.textureID)];
     }
 
@@ -105,14 +102,14 @@
     ZegoTextureRenderer *renderer = [self.renderers objectForKey:@(textureID)];
 
     if (!renderer) {
-        ZGLog(@"[destroyTextureRenderer] renderer for textureID:%ld not exists", (long)textureID);
+        ZGLog(@"[destroyTextureRenderer] renderer for textureID:%ld not exists", (long) textureID);
         [self logCurrentRenderers];
         return NO;
     }
 
-    ZGLog(@"[destroyTextureRenderer] textureID:%ld, renderer:%p", (long)textureID, renderer);
+    ZGLog(@"[destroyTextureRenderer] textureID:%ld, renderer:%p", (long) textureID, renderer);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.renderers removeObjectForKey:@(renderer.textureID)];
     }
 
@@ -142,11 +139,11 @@
     if (!self.isInited) {
         FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"plugins.zego.im/zego_texture_renderer_controller_event_handler" binaryMessenger:messenger];
         [eventChannel setStreamHandler:self];
-        
+
         // Enable custom video render
         ZegoCustomVideoRenderConfig *renderConfig = [[ZegoCustomVideoRenderConfig alloc] init];
-        renderConfig.frameFormatSeries = ZegoVideoFrameFormatSeriesRGB;
-        renderConfig.bufferType = ZegoVideoBufferTypeCVPixelBuffer;
+        renderConfig.frameFormatSeries            = ZegoVideoFrameFormatSeriesRGB;
+        renderConfig.bufferType                   = ZegoVideoBufferTypeCVPixelBuffer;
         [[ZegoExpressEngine sharedEngine] enableCustomVideoRender:YES config:renderConfig];
 
         // Set up custom video render handler
@@ -158,7 +155,7 @@
 }
 
 - (void)uninitController {
-    @synchronized (self) {
+    @synchronized(self) {
         [self.renderers removeAllObjects];
         [self.capturedTextureIdMap removeAllObjects];
         [self.remoteTextureIdMap removeAllObjects];
@@ -172,18 +169,17 @@
     ZegoTextureRenderer *renderer = [self.renderers objectForKey:@(textureID)];
 
     if (!renderer) {
-        ZGLog(@"[bindCapturedChannel] renderer for textureID:%ld not exists", (long)textureID);
+        ZGLog(@"[bindCapturedChannel] renderer for textureID:%ld not exists", (long) textureID);
         [self logCurrentRenderers];
         return NO;
     }
 
-    ZGLog(@"[bindCapturedChannel] textureID:%ld, renderer:%p, channel:%d",
-          (long)textureID, renderer, channel.intValue);
+    ZGLog(@"[bindCapturedChannel] textureID:%ld, renderer:%p, channel:%d", (long) textureID, renderer, channel.intValue);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.capturedTextureIdMap setObject:@(textureID) forKey:channel];
     }
-    
+
     [self logCurrentRenderers];
 
     return YES;
@@ -192,7 +188,7 @@
 - (void)unbindCapturedChannel:(NSNumber *)channel {
     ZGLog(@"[unbindCapturedChannel] channel:%d", channel.intValue);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.capturedTextureIdMap removeObjectForKey:channel];
     }
 
@@ -204,15 +200,14 @@
     ZegoTextureRenderer *renderer = [self.renderers objectForKey:@(textureID)];
 
     if (!renderer) {
-        ZGLog(@"[bindRemoteStreamId] renderer for textureID:%ld not exists", (long)textureID);
+        ZGLog(@"[bindRemoteStreamId] renderer for textureID:%ld not exists", (long) textureID);
         [self logCurrentRenderers];
         return NO;
     }
 
-    ZGLog(@"[bindRemoteStreamId] textureID:%ld, renderer:%p, streamId:%@",
-          (long)textureID, renderer, streamId);
+    ZGLog(@"[bindRemoteStreamId] textureID:%ld, renderer:%p, streamId:%@", (long) textureID, renderer, streamId);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.remoteTextureIdMap setObject:@(textureID) forKey:streamId];
     }
 
@@ -224,7 +219,7 @@
 - (void)unbindRemoteStreamId:(NSString *)streamId {
     ZGLog(@"[unbindRemoteStreamId] streamId:%@", streamId);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.remoteTextureIdMap removeObjectForKey:streamId];
     }
 
@@ -235,15 +230,14 @@
     ZegoTextureRenderer *renderer = [self.renderers objectForKey:@(textureID)];
 
     if (!renderer) {
-        ZGLog(@"[bindMediaPlayerIndex] renderer for textureID:%ld not exists", (long)textureID);
+        ZGLog(@"[bindMediaPlayerIndex] renderer for textureID:%ld not exists", (long) textureID);
         [self logCurrentRenderers];
         return NO;
     }
 
-    ZGLog(@"[bindMediaPlayerIndex] textureID:%ld, renderer:%p, index:%@",
-          (long)textureID, renderer, index);
+    ZGLog(@"[bindMediaPlayerIndex] textureID:%ld, renderer:%p, index:%@", (long) textureID, renderer, index);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.mediaPlayerTextureIdMap setObject:@(textureID) forKey:index];
     }
 
@@ -255,7 +249,7 @@
 - (void)unbindMediaPlayerIndex:(NSNumber *)index {
     ZGLog(@"[unbindMediaPlayerIndex] index:%@", index);
 
-    @synchronized (self) {
+    @synchronized(self) {
         [self.mediaPlayerTextureIdMap removeObjectForKey:index];
     }
 
@@ -263,52 +257,48 @@
 }
 
 - (void)setVideoSourceChannel:(NSNumber *)channel withSource:(ZegoVideoSourceType)sourceType {
-    ZGLog(@"[bindVideoSourceChannel] sourceType:%ld, channel:%@",
-          (long)sourceType, channel);
-    @synchronized (self) {
+    ZGLog(@"[bindVideoSourceChannel] sourceType:%ld, channel:%@", (long) sourceType, channel);
+    @synchronized(self) {
         self.videoSourceChannelMap[channel] = @(sourceType);
     }
 }
 
-- (void)sendScreenCapturedVideoFrameRawData:(const void *)data
-                                 dataLength:(unsigned int)dataLength
-                                      param:(ZegoVideoFrameParam *)param {
-    
+- (void)sendScreenCapturedVideoFrameRawData:(const void *)data dataLength:(unsigned int)dataLength param:(ZegoVideoFrameParam *)param {
+
     NSArray<NSNumber *> *channles = [self.videoSourceChannelMap allKeysForObject:@(ZegoVideoSourceTypeScreenCapture)];
     if (!channles || channles.count <= 0) {
         return;
     }
-    
+
     CVPixelBufferRef target = NULL;
-    int width = param.size.width;
-    int height = param.size.height;
-    
-    int dataWidth = dataLength/4/height;
-    
-    //最终创建的图像可能经过字节对齐，比如创建时传入width、height，最终创建出来的图像和获取的rgb_data，并不是width*height*4
-    NSDictionary* pixBuffAttributes = @{
-        (id)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA),
-        (id)kCVPixelBufferIOSurfacePropertiesKey : @{
-            (id)kIOSurfaceBytesPerRow : @(dataWidth * 4),
-            (id)kIOSurfaceWidth : @(dataWidth),
-            (id)kIOSurfaceHeight : @(height),
+    int              width  = param.size.width;
+    int              height = param.size.height;
+
+    int dataWidth = dataLength / 4 / height;
+
+    // 最终创建的图像可能经过字节对齐，比如创建时传入width、height，最终创建出来的图像和获取的rgb_data，并不是width*height*4
+    NSDictionary *pixBuffAttributes = @{
+        (id) kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA),
+        (id) kCVPixelBufferIOSurfacePropertiesKey : @{
+            (id) kIOSurfaceBytesPerRow : @(dataWidth * 4),
+            (id) kIOSurfaceWidth : @(dataWidth),
+            (id) kIOSurfaceHeight : @(height),
         },
-        (id)kCVPixelBufferOpenGLCompatibilityKey : @YES,
-        (id)kCVPixelBufferMetalCompatibilityKey : @YES,
+        (id) kCVPixelBufferOpenGLCompatibilityKey : @YES,
+        (id) kCVPixelBufferMetalCompatibilityKey : @YES,
     };
-    
+
     CVPixelBufferCreate(kCFAllocatorDefault, dataWidth, height, kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef _Nullable)(pixBuffAttributes), &target);
-    
+
     CVPixelBufferLockBaseAddress(target, kCVPixelBufferLock_ReadOnly);
     void *rgb_data = CVPixelBufferGetBaseAddress(target);
-    for(int i = 0; i<height; i++)
-    {
-        memcpy(rgb_data + i*dataWidth*4, data+dataWidth*4*i,width*4);
+    for (int i = 0; i < height; i++) {
+        memcpy(rgb_data + i * dataWidth * 4, data + dataWidth * 4 * i, width * 4);
     }
     CVPixelBufferUnlockBaseAddress(target, 0);
-    
-    [self onCapturedVideoFrameCVPixelBuffer:target param:param flipMode:ZegoVideoFlipModeNone channel:(ZegoPublishChannel)channles.firstObject.unsignedIntValue];
-    
+
+    [self onCapturedVideoFrameCVPixelBuffer:target param:param flipMode:ZegoVideoFlipModeNone channel:(ZegoPublishChannel) channles.firstObject.unsignedIntValue];
+
     if (target != NULL) {
         CVPixelBufferRelease(target);
     }
@@ -316,36 +306,31 @@
 
 #pragma mark - Private Methods
 
-- (void)updateRenderer:(ZegoTextureRenderer *)renderer
-            withBuffer:(CVPixelBufferRef)buffer
-                 param:(ZegoVideoFrameParam *)param
-              flipMode:(ZegoVideoFlipMode)flipMode {
-    
-    if ((int)param.size.width != (int)renderer.imageSize.width ||
-        (int)param.size.height != (int)renderer.imageSize.height ||
-        param.rotation != renderer.rotation ||
+- (void)updateRenderer:(ZegoTextureRenderer *)renderer withBuffer:(CVPixelBufferRef)buffer param:(ZegoVideoFrameParam *)param flipMode:(ZegoVideoFlipMode)flipMode {
+
+    if ((int) param.size.width != (int) renderer.imageSize.width || (int) param.size.height != (int) renderer.imageSize.height || param.rotation != renderer.rotation ||
         flipMode != renderer.flipMode) {
-        
+
         ZGLog(@"[updateRenderer] textureID:%lld, width:%.2f, height: %.2f, isMirror: %d", renderer.textureID, param.size.width, param.size.height, flipMode == ZegoVideoFlipModeX);
-        
+
         NSDictionary *map = @{
-            @"type": @"update",
-            @"textureID": @(renderer.textureID),
-            @"width": @(param.size.width),
-            @"height": @(param.size.height),
-            @"isMirror": @(flipMode == ZegoVideoFlipModeX ? 1 : 0),
+            @"type" : @"update",
+            @"textureID" : @(renderer.textureID),
+            @"width" : @(param.size.width),
+            @"height" : @(param.size.height),
+            @"isMirror" : @(flipMode == ZegoVideoFlipModeX ? 1 : 0),
             // TODO: Rotation & FlipModeY
         };
         if (self && self.eventSink != nil) {
             self.eventSink(map);
         }
     }
-    
+
     renderer.imageSize = param.size;
-    renderer.rotation = param.rotation;
-    renderer.flipMode = flipMode;
-    
-    @synchronized (self) {
+    renderer.rotation  = param.rotation;
+    renderer.flipMode  = flipMode;
+
+    @synchronized(self) {
         if (!self.isAppEnterBackground) {
             [renderer updateSrcFrameBuffer:buffer];
         }
@@ -354,29 +339,26 @@
 
 #pragma mark - ZegoCustomVideoRenderHandler
 
-- (void)onCapturedVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer
-                                    param:(ZegoVideoFrameParam *)param
-                                 flipMode:(ZegoVideoFlipMode)flipMode
-                                  channel:(ZegoPublishChannel)channel {
+- (void)onCapturedVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer param:(ZegoVideoFrameParam *)param flipMode:(ZegoVideoFlipMode)flipMode channel:(ZegoPublishChannel)channel {
     if ([self.renderHandler respondsToSelector:@selector(onCapturedVideoFrameCVPixelBuffer:param:flipMode:channel:)]) {
         ZGFlutterVideoFrameParam *videoFrameParam = [[ZGFlutterVideoFrameParam alloc] init];
-        videoFrameParam.size = param.size;
-        videoFrameParam.format = (ZGFlutterVideoFrameFormat)param.format;
-        videoFrameParam.rotation = param.rotation;
-        int tempStrides[4] = {0};
-        videoFrameParam.strides = tempStrides;
+        videoFrameParam.size                      = param.size;
+        videoFrameParam.format                    = (ZGFlutterVideoFrameFormat) param.format;
+        videoFrameParam.rotation                  = param.rotation;
+        int tempStrides[4]                        = {0};
+        videoFrameParam.strides                   = tempStrides;
         for (int i = 0; i < 4; i++) {
             videoFrameParam.strides[i] = param.strides[i];
         }
-        
-        [self.renderHandler onCapturedVideoFrameCVPixelBuffer:buffer param:videoFrameParam flipMode:(ZGFlutterVideoFlipMode)flipMode channel:(ZGFlutterPublishChannel)channel];
-    }
-    
-    NSNumber *textureID = nil;
-    ZegoTextureRenderer *renderer = nil;
 
-    NSNumber* needAplha = nil;
-    @synchronized (self) {
+        [self.renderHandler onCapturedVideoFrameCVPixelBuffer:buffer param:videoFrameParam flipMode:(ZGFlutterVideoFlipMode) flipMode channel:(ZGFlutterPublishChannel) channel];
+    }
+
+    NSNumber            *textureID = nil;
+    ZegoTextureRenderer *renderer  = nil;
+
+    NSNumber *needAplha = nil;
+    @synchronized(self) {
         textureID = [self.capturedTextureIdMap objectForKey:@(channel)];
         if (!textureID) {
             return;
@@ -385,49 +367,45 @@
         if (!renderer) {
             return;
         }
-        
+
         needAplha = [self.alphaTextureIdMap objectForKey:textureID];
-        
     }
     if ([needAplha isEqual:@(1)]) {
         CVPixelBufferLockBaseAddress(buffer, 0);
-        void *baseAddress = CVPixelBufferGetBaseAddress(buffer);
-        size_t width = CVPixelBufferGetWidth(buffer);
-        size_t height = CVPixelBufferGetHeight(buffer);
-        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
-        vImage_Buffer srcBuffer = { baseAddress, height, width, bytesPerRow };
-        
+        void         *baseAddress = CVPixelBufferGetBaseAddress(buffer);
+        size_t        width       = CVPixelBufferGetWidth(buffer);
+        size_t        height      = CVPixelBufferGetHeight(buffer);
+        size_t        bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
+        vImage_Buffer srcBuffer   = {baseAddress, height, width, bytesPerRow};
+
         vImage_Error error = vImagePremultiplyData_RGBA8888(&srcBuffer, &srcBuffer, kvImageNoFlags);
         if (error != kvImageNoError) {
-            
         }
         CVPixelBufferUnlockBaseAddress(buffer, 0);
     }
     [self updateRenderer:renderer withBuffer:buffer param:param flipMode:flipMode];
 }
 
-- (void)onRemoteVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer
-                                  param:(ZegoVideoFrameParam *)param
-                               streamID:(NSString *)streamID {
+- (void)onRemoteVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer param:(ZegoVideoFrameParam *)param streamID:(NSString *)streamID {
     if ([self.renderHandler respondsToSelector:@selector(onRemoteVideoFrameCVPixelBuffer:param:streamID:)]) {
         ZGFlutterVideoFrameParam *videoFrameParam = [[ZGFlutterVideoFrameParam alloc] init];
-        videoFrameParam.size = param.size;
-        videoFrameParam.format = (ZGFlutterVideoFrameFormat)param.format;
-        videoFrameParam.rotation = param.rotation;
-        int tempStrides[4] = {0};
-        videoFrameParam.strides = tempStrides;
+        videoFrameParam.size                      = param.size;
+        videoFrameParam.format                    = (ZGFlutterVideoFrameFormat) param.format;
+        videoFrameParam.rotation                  = param.rotation;
+        int tempStrides[4]                        = {0};
+        videoFrameParam.strides                   = tempStrides;
         for (int i = 0; i < 4; i++) {
             videoFrameParam.strides[i] = param.strides[i];
         }
-        
+
         [self.renderHandler onRemoteVideoFrameCVPixelBuffer:buffer param:videoFrameParam streamID:streamID];
     }
-    
-    NSNumber *textureID = nil;
-    ZegoTextureRenderer *renderer = nil;
 
-    NSNumber* needAplha = nil;
-    @synchronized (self) {
+    NSNumber            *textureID = nil;
+    ZegoTextureRenderer *renderer  = nil;
+
+    NSNumber *needAplha = nil;
+    @synchronized(self) {
         textureID = [self.remoteTextureIdMap objectForKey:streamID];
         if (!textureID) {
             return;
@@ -436,48 +414,46 @@
         if (!renderer) {
             return;
         }
-        
+
         needAplha = [self.alphaTextureIdMap objectForKey:textureID];
     }
-    
+
     if ([needAplha isEqual:@(1)]) {
         CVPixelBufferLockBaseAddress(buffer, 0);
-        void *baseAddress = CVPixelBufferGetBaseAddress(buffer);
-        size_t width = CVPixelBufferGetWidth(buffer);
-        size_t height = CVPixelBufferGetHeight(buffer);
-        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
-        vImage_Buffer srcBuffer = { baseAddress, height, width, bytesPerRow };
-        
+        void         *baseAddress = CVPixelBufferGetBaseAddress(buffer);
+        size_t        width       = CVPixelBufferGetWidth(buffer);
+        size_t        height      = CVPixelBufferGetHeight(buffer);
+        size_t        bytesPerRow = CVPixelBufferGetBytesPerRow(buffer);
+        vImage_Buffer srcBuffer   = {baseAddress, height, width, bytesPerRow};
+
         vImage_Error error = vImagePremultiplyData_RGBA8888(&srcBuffer, &srcBuffer, kvImageNoFlags);
         if (error != kvImageNoError) {
-            
         }
         CVPixelBufferUnlockBaseAddress(buffer, 0);
     }
-    
+
     [self updateRenderer:renderer withBuffer:buffer param:param flipMode:ZegoVideoFlipModeNone];
 }
 
 - (void)mediaPlayer:(ZegoMediaPlayer *)mediaPlayer videoFramePixelBuffer:(CVPixelBufferRef)buffer param:(ZegoVideoFrameParam *)param extraInfo:(NSDictionary *)extraInfo {
-    NSNumber *textureID = nil;
-    ZegoTextureRenderer *renderer = nil;
+    NSNumber            *textureID = nil;
+    ZegoTextureRenderer *renderer  = nil;
 
     if ([self.mediaPlayerVideoHandler respondsToSelector:@selector(mediaPlayer:videoFramePixelBuffer:param:extraInfo:)]) {
         ZGFlutterVideoFrameParam *videoFrameParam = [[ZGFlutterVideoFrameParam alloc] init];
-        videoFrameParam.size = param.size;
-        videoFrameParam.format = (ZGFlutterVideoFrameFormat)param.format;
-        videoFrameParam.rotation = param.rotation;
-        int tempStrides[4] = {0};
-        videoFrameParam.strides = tempStrides;
+        videoFrameParam.size                      = param.size;
+        videoFrameParam.format                    = (ZGFlutterVideoFrameFormat) param.format;
+        videoFrameParam.rotation                  = param.rotation;
+        int tempStrides[4]                        = {0};
+        videoFrameParam.strides                   = tempStrides;
         for (int i = 0; i < 4; i++) {
             videoFrameParam.strides[i] = param.strides[i];
         }
-        
+
         [self.mediaPlayerVideoHandler mediaPlayer:[mediaPlayer.index intValue] videoFramePixelBuffer:buffer param:videoFrameParam extraInfo:extraInfo];
     }
-    
-    
-    @synchronized (self) {
+
+    @synchronized(self) {
         textureID = [self.mediaPlayerTextureIdMap objectForKey:mediaPlayer.index];
         if (!textureID) {
             return;
@@ -487,32 +463,31 @@
             return;
         }
     }
-    
+
     [self updateRenderer:renderer withBuffer:buffer param:param flipMode:ZegoVideoFlipModeNone];
 }
 
-- (void)setCustomVideoRenderHandler: (id<ZegoFlutterCustomVideoRenderHandler> _Nullable) handler {
+- (void)setCustomVideoRenderHandler:(id<ZegoFlutterCustomVideoRenderHandler> _Nullable)handler {
     self.renderHandler = handler;
 }
 
--(void)setMediaPlayerVideoHandle: (id<ZegoFlutterMediaPlayerVideoHandler> _Nullable) handler {
+- (void)setMediaPlayerVideoHandle:(id<ZegoFlutterMediaPlayerVideoHandler> _Nullable)handler {
     self.mediaPlayerVideoHandler = handler;
 }
 
--(BOOL)enableTextureAlpha:(BOOL) enable withTexture:(int64_t)textureID {
+- (BOOL)enableTextureAlpha:(BOOL)enable withTexture:(int64_t)textureID {
     ZegoTextureRenderer *renderer = [self.renderers objectForKey:@(textureID)];
 
     if (!renderer) {
-        ZGLog(@"[bindMediaPlayerIndex] renderer for textureID:%ld not exists", (long)textureID);
+        ZGLog(@"[bindMediaPlayerIndex] renderer for textureID:%ld not exists", (long) textureID);
         [self logCurrentRenderers];
         return NO;
     }
 
-    ZGLog(@"[enableTextureAlpha] textureID:%ld, renderer:%p, enable:%d",
-          (long)textureID, renderer, enable);
+    ZGLog(@"[enableTextureAlpha] textureID:%ld, renderer:%p, enable:%d", (long) textureID, renderer, enable);
 
-    @synchronized (self) {
-        [self.alphaTextureIdMap setObject:enable?@1:@0 forKey:@(textureID)];
+    @synchronized(self) {
+        [self.alphaTextureIdMap setObject:enable ? @1 : @0 forKey:@(textureID)];
     }
 
     [self logCurrentRenderers];
@@ -522,13 +497,13 @@
 
 #pragma mark - FlutterStreamHandler
 
-- (FlutterError * _Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(nonnull FlutterEventSink)events {
+- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(nonnull FlutterEventSink)events {
     self.eventSink = events;
     ZGLog(@"[ZegoTextureRendererController] [onListen] set eventSink: %p", _eventSink);
     return nil;
 }
 
-- (FlutterError * _Nullable)onCancelWithArguments:(id _Nullable)arguments {
+- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
     ZGLog(@"[ZegoTextureRendererController] [onCancel] set eventSink: %p to nil", _eventSink);
     self.eventSink = nil;
     return nil;

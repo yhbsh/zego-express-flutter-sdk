@@ -9,9 +9,9 @@
 #import "ZegoPlatformViewFactory.h"
 #import "ZegoLog.h"
 
-@interface ZegoPlatformViewFactory()
+@interface ZegoPlatformViewFactory ()
 
-@property (nonatomic, strong) NSMutableDictionary<NSNumber*, ZegoPlatformView*> *platformViewMap;
+@property(nonatomic, strong) NSMutableDictionary<NSNumber *, ZegoPlatformView *> *platformViewMap;
 
 @end
 
@@ -19,9 +19,9 @@
 
 + (instancetype)sharedInstance {
     static ZegoPlatformViewFactory *instance = nil;
-    static dispatch_once_t onceToken;
+    static dispatch_once_t          onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[ZegoPlatformViewFactory alloc] init];
+      instance = [[ZegoPlatformViewFactory alloc] init];
     });
     return instance;
 }
@@ -58,7 +58,7 @@
     ZGLog(@"[getPlatformView] viewID:%d", viewID.intValue);
 
     [self logCurrentPlatformViews];
-    
+
     return [self.platformViewMap objectForKey:viewID];
 }
 
@@ -86,13 +86,11 @@
 
 #if TARGET_OS_IPHONE
 /// Called when dart invoke `createPlatformView`, that is, when Widget `UiKitView` is added to the flutter render tree
-- (NSObject<FlutterPlatformView>*)createWithFrame:(CGRect)frame
-                                   viewIdentifier:(int64_t)viewId
-                                        arguments:(id _Nullable)args {
-    
+- (NSObject<FlutterPlatformView> *)createWithFrame:(CGRect)frame viewIdentifier:(int64_t)viewId arguments:(id _Nullable)args {
+
     ZegoPlatformView *view = [[ZegoPlatformView alloc] initWithRect:frame viewID:viewId];
     [self addPlatformView:view viewID:@(viewId)];
-    
+
     return view;
 }
 
@@ -101,7 +99,7 @@
 - (nonnull NSView *)createWithViewIdentifier:(int64_t)viewId arguments:(nullable id)args {
     ZegoPlatformView *view = [[ZegoPlatformView alloc] initWithRect:CGRectZero viewID:viewId];
     [self addPlatformView:view viewID:@(viewId)];
-    
+
     return view.view;
 }
 

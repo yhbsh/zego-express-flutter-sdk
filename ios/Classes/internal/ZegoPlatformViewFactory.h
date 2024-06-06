@@ -20,7 +20,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZegoPlatformViewFactory : NSObject<FlutterPlatformViewFactory>
+@interface ZegoPlatformViewFactory : NSObject <FlutterPlatformViewFactory>
 
 + (instancetype)sharedInstance;
 

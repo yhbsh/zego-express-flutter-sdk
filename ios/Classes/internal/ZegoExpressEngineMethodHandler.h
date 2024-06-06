@@ -14,16 +14,15 @@
 #import <FlutterMacOS/FlutterMacOS.h>
 #endif
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZegoExpressEngineMethodHandler : NSObject
 
-@property (nonatomic, assign, readonly) BOOL enablePlatformView;
+@property(nonatomic, assign, readonly) BOOL enablePlatformView;
 
 + (instancetype)sharedInstance;
 
-- (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result;
+- (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result;
 
 - (void)setRegistrar:(id<FlutterPluginRegistrar>)registrar eventSink:(FlutterEventSink)sink;
 

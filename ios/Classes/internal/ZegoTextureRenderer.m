@@ -11,7 +11,7 @@
 
 @interface ZegoTextureRenderer ()
 
-@property (nonatomic, weak) id<FlutterTextureRegistry> registry;
+@property(nonatomic, weak) id<FlutterTextureRegistry> registry;
 
 @end
 
@@ -22,7 +22,7 @@
 - (instancetype)initWithTextureRegistry:(id<FlutterTextureRegistry>)registry size:(CGSize)size {
     self = [super init];
     if (self) {
-        _registry = registry;
+        _registry  = registry;
         _textureID = [registry registerTexture:self];
     }
 
@@ -32,7 +32,7 @@
 }
 
 - (void)destroy {
-    @synchronized (self) {
+    @synchronized(self) {
         // Release GPU Resource
         [self.registry unregisterTexture:_textureID];
     }
@@ -41,7 +41,7 @@
 }
 
 - (void)updateSrcFrameBuffer:(CVPixelBufferRef)buffer {
-    @synchronized (self) {
+    @synchronized(self) {
         if (_lastPixelBuffer) {
             CVPixelBufferRelease(_lastPixelBuffer);
         }
@@ -54,7 +54,7 @@
 #pragma mark - FlutterTexture Delegate
 
 - (CVPixelBufferRef)copyPixelBuffer {
-    @synchronized (self) {
+    @synchronized(self) {
         if (_lastPixelBuffer) {
             CVPixelBufferRetain(_lastPixelBuffer);
         }

@@ -8,10 +8,10 @@
 #ifndef ZegoMediaPlayerVideoManager_h
 #define ZegoMediaPlayerVideoManager_h
 
-#import <Foundation/Foundation.h>
-#import <CoreVideo/CoreVideo.h>
-#import <CoreMedia/CoreMedia.h>
 #import "ZegoCustomVideoDefine.h"
+#import <CoreMedia/CoreMedia.h>
+#import <CoreVideo/CoreVideo.h>
+#import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,9 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param mediaPlayerIndex Callback player index
 /// @param buffer video data of CVPixelBuffer format
 /// @param param video data frame param
-- (void)mediaPlayer:(int)mediaPlayerIndex
-    videoFramePixelBuffer:(CVPixelBufferRef)buffer
-                    param:(ZGFlutterVideoFrameParam *)param;
+- (void)mediaPlayer:(int)mediaPlayerIndex videoFramePixelBuffer:(CVPixelBufferRef)buffer param:(ZGFlutterVideoFrameParam *)param;
 
 /// The callback triggered when the media player throws out video frame data (in CVPixelBuffer format).
 /// Note: This function is only available in ZegoExpressVideo SDK!
@@ -36,10 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param buffer video data of CVPixelBuffer format
 /// @param param video data frame param
 /// @param extraInfo video data frame extra info.
-- (void)mediaPlayer:(int)mediaPlayerIndex
-    videoFramePixelBuffer:(CVPixelBufferRef)buffer
-                    param:(ZGFlutterVideoFrameParam *)param
-                extraInfo:(NSDictionary *)extraInfo;
+- (void)mediaPlayer:(int)mediaPlayerIndex videoFramePixelBuffer:(CVPixelBufferRef)buffer param:(ZGFlutterVideoFrameParam *)param extraInfo:(NSDictionary *)extraInfo;
 
 @end
 
@@ -59,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param handler Video data callback handler for media player
 - (void)setVideoHandler:(id<ZegoFlutterMediaPlayerVideoHandler>)handler;
 
--(id<ZegoFlutterMediaPlayerVideoHandler>_Nullable)getMediaPlayerVideoHandler;
+- (id<ZegoFlutterMediaPlayerVideoHandler> _Nullable)getMediaPlayerVideoHandler;
 
 @end
 

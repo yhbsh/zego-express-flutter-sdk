@@ -9,11 +9,11 @@
 #ifndef ZegoTextureRenderController_h
 #define ZegoTextureRenderController_h
 
+#import "ZegoCustomVideoRenderManager.h"
+#import "ZegoMediaPlayerVideoManager.h"
 #import "ZegoTextureRenderer.h"
 #import <Foundation/Foundation.h>
 #import <ZegoExpressEngine/ZegoExpressEngine.h>
-#import "ZegoCustomVideoRenderManager.h"
-#import "ZegoMediaPlayerVideoManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,9 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Called when dart invoke `createTextureRenderer`
 /// @return textureID
-- (int64_t)createTextureRenderer:(id<FlutterTextureRegistry>)registry
-                       viewWidth:(int)width
-                      viewHeight:(int)height;
+- (int64_t)createTextureRenderer:(id<FlutterTextureRegistry>)registry viewWidth:(int)width viewHeight:(int)height;
 
 /// Called when dart invoke `destroyTextureRenderer`
 - (BOOL)destroyTextureRenderer:(int64_t)textureID;
@@ -59,26 +57,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unbindMediaPlayerIndex:(NSNumber *)index;
 
 /// Called when dart invoke `enableCustomVideoRender`
-- (void)setCustomVideoRenderHandler: (id<ZegoFlutterCustomVideoRenderHandler> _Nullable) handler;
+- (void)setCustomVideoRenderHandler:(id<ZegoFlutterCustomVideoRenderHandler> _Nullable)handler;
 
 /// Called when dart invoke `MediaPlayer.enableVideoData`
-- (void)setMediaPlayerVideoHandle: (id<ZegoFlutterMediaPlayerVideoHandler> _Nullable) handler;
+- (void)setMediaPlayerVideoHandle:(id<ZegoFlutterMediaPlayerVideoHandler> _Nullable)handler;
 
 /// Called when dart invoke `startPreview/startPlayingStream/updatePlayingCanvas`
-- (BOOL)enableTextureAlpha:(BOOL) enable withTexture:(int64_t)textureID;
+- (BOOL)enableTextureAlpha:(BOOL)enable withTexture:(int64_t)textureID;
 
 /// Called when dart invoke `setVideoSource`
 - (void)setVideoSourceChannel:(NSNumber *)channel withSource:(ZegoVideoSourceType)sourceType;
 
 #pragma mark - For CustomVideoCaptureManager
-- (void)onCapturedVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer
-                                    param:(ZegoVideoFrameParam *)param
-                                 flipMode:(ZegoVideoFlipMode)flipMode
-                                  channel:(ZegoPublishChannel)channel;
+- (void)onCapturedVideoFrameCVPixelBuffer:(CVPixelBufferRef)buffer param:(ZegoVideoFrameParam *)param flipMode:(ZegoVideoFlipMode)flipMode channel:(ZegoPublishChannel)channel;
 
-- (void)sendScreenCapturedVideoFrameRawData:(const void *)data
-                                 dataLength:(unsigned int)dataLength
-                                      param:(ZegoVideoFrameParam *)param;
+- (void)sendScreenCapturedVideoFrameRawData:(const void *)data dataLength:(unsigned int)dataLength param:(ZegoVideoFrameParam *)param;
 
 @end
 

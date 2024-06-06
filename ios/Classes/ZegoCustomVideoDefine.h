@@ -84,16 +84,16 @@ typedef NS_ENUM(NSUInteger, ZGFlutterViewMode) {
 @interface ZGFlutterVideoFrameParam : NSObject
 
 /// Video frame format
-@property (nonatomic, assign) ZGFlutterVideoFrameFormat format;
+@property(nonatomic, assign) ZGFlutterVideoFrameFormat format;
 
 /// Number of bytes per line (for example: BGRA only needs to consider strides [0], I420 needs to consider strides [0,1,2])
-@property (nonatomic, assign, nonnull) int *strides;
+@property(nonatomic, assign, nonnull) int *strides;
 
 /// The rotation direction of the video frame, the SDK rotates clockwise
-@property (nonatomic, assign) int rotation;
+@property(nonatomic, assign) int rotation;
 
 /// Video frame size
-@property (nonatomic, assign) CGSize size;
+@property(nonatomic, assign) CGSize size;
 
 @end
 
@@ -101,13 +101,13 @@ typedef NS_ENUM(NSUInteger, ZGFlutterViewMode) {
 @interface ZGFlutterTrafficControlInfo : NSObject
 
 /// Video FPS to be adjusted
-@property (nonatomic, assign) int fps;
+@property(nonatomic, assign) int fps;
 
 /// Video bitrate in kbps to be adjusted
-@property (nonatomic, assign) int bitrate;
+@property(nonatomic, assign) int bitrate;
 
 /// Video resolution to be adjusted
-@property (nonatomic, assign) CGSize resolution;
+@property(nonatomic, assign) CGSize resolution;
 
 @end
 
@@ -117,19 +117,19 @@ typedef NS_ENUM(NSUInteger, ZGFlutterViewMode) {
 @interface ZGFlutterVideoEncodedFrameParam : NSObject
 
 /// Video encoded frame format
-@property (nonatomic, assign) ZGFlutterVideoEncodedFrameFormat format;
+@property(nonatomic, assign) ZGFlutterVideoEncodedFrameFormat format;
 
 /// Whether it is a keyframe
-@property (nonatomic, assign) BOOL isKeyFrame;
+@property(nonatomic, assign) BOOL isKeyFrame;
 
 /// Video frame counterclockwise rotation angle
-@property (nonatomic, assign) int rotation;
+@property(nonatomic, assign) int rotation;
 
 /// Video frame size
-@property (nonatomic, assign) CGSize size;
+@property(nonatomic, assign) CGSize size;
 
 /// SEI data (Optional, if you don't need to send SEI, set it to null. Deprecated, use [sendSEI] instead). Useful when set format as [AVCC] or [AnnexB]
-@property (nonatomic, strong, nullable) NSData *SEIData;
+@property(nonatomic, strong, nullable) NSData *SEIData;
 
 @end
 

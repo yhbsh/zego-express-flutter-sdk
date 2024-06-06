@@ -40,9 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param buffer The block data of the media resource.
 /// @param bufferSize Length of media resource block data.
 /// @return The size of the buffer, -1 is returned for failure.
-- (int)mediaPlayer:(int)mediaPlayerIndex
-         blockData:(unsigned char *const)buffer
-        bufferSize:(unsigned int)bufferSize;
+- (int)mediaPlayer:(int)mediaPlayerIndex blockData:(unsigned char *const)buffer bufferSize:(unsigned int)bufferSize;
 
 @end
 
@@ -62,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param handler The media resource block data callback handler of the media player.
 - (void)setBlockDataHandler:(id<ZegoFlutterMediaPlayerBlockDataHandler>)handler;
 
-- (id<ZegoFlutterMediaPlayerBlockDataHandler>_Nullable)getMediaPlayerBlockDataHandler;
+- (id<ZegoFlutterMediaPlayerBlockDataHandler> _Nullable)getMediaPlayerBlockDataHandler;
 
 @end
 

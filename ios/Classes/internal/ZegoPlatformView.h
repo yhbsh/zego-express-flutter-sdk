@@ -22,14 +22,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 #if TARGET_OS_IPHONE
-@interface ZegoPlatformView : NSObject<FlutterPlatformView>
+@interface ZegoPlatformView : NSObject <FlutterPlatformView>
 #elif TARGET_OS_OSX
 @interface ZegoPlatformView : NSObject
 #endif
 
-@property (nonatomic, strong, readonly) ZGView *view;
+@property(nonatomic, strong, readonly) ZGView *view;
 
-- (instancetype)initWithRect:(CGRect)rect viewID:(int64_t) viewID;
+- (instancetype)initWithRect:(CGRect)rect viewID:(int64_t)viewID;
 
 @end
 
