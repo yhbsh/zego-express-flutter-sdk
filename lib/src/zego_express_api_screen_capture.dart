@@ -2,8 +2,6 @@ import 'zego_express_api.dart';
 import 'impl/zego_express_impl.dart';
 import 'zego_express_defines.dart';
 
-// ignore_for_file: deprecated_member_use_from_same_package
-
 extension ZegoExpressEngineScreenCapture on ZegoExpressEngine {
   /// Get a list of screens or windows in a screen.
   ///

@@ -1,19 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-// ignore: unnecessary_import
-import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'zego_express_texture_renderer_impl.dart';
+
 import '../zego_express_api.dart';
 import '../zego_express_defines.dart';
 import '../zego_express_enum_extension.dart';
-import '../utils/zego_express_utils.dart';
-
-// ignore_for_file: deprecated_member_use_from_same_package, curly_braces_in_flow_control_structures
+import 'zego_express_texture_renderer_impl.dart';
 
 class Global {
   static String pluginVersion = "3.10.0";
@@ -52,40 +48,11 @@ class ZegoExpressImpl {
   /// Singleton instance
   static final ZegoExpressImpl instance = ZegoExpressImpl._internal();
 
-  /// Exposing methodChannel to other files
   static MethodChannelWrapper get methodChannel => _channel;
 
-  // is create engine
   static bool isEngineCreated = false;
-
-  // enablePlatformView
   static bool _enablePlatformView = false;
-
-  static bool shouldUsePlatformView() {
-    bool use = ZegoExpressImpl._enablePlatformView;
-    // Web only supports PlatformView
-    use |= kIsWeb;
-    // TODO: PlatformView support on Windows has not yet been implemented
-    // Ref: https://github.com/flutter/flutter/issues/31713
-    use &= !kIsWindows;
-
-    if (kIsMacOS) {
-      try {
-        String dartVersion = Platform.version.split(' ')[0];
-        int? major = int.tryParse(dartVersion.split('.')[0]);
-        // Flutter v3.10 <==> Dart v3.0
-        if (major == null || major < 3) {
-          // PlatformView on macOS has a crash issue under flutter v3.10
-          // Ref: https://github.com/flutter/flutter/issues/96668
-          use = false;
-        }
-      } catch (e) {
-        use = false;
-      }
-    }
-
-    return use;
-  }
+  static bool shouldUsePlatformView() => ZegoExpressImpl._enablePlatformView;
 
   // Private function
   static void Function(String api, String jsonArgs)? onFlutterApiCalledDetail;
@@ -97,11 +64,22 @@ class ZegoExpressImpl {
 
     _enablePlatformView = profile.enablePlatformView ?? false;
 
-    await _channel.invokeMethod('createEngineWithProfile', {
-      'profile': {'appID': profile.appID, 'appSign': profile.appSign, 'scenario': profile.scenario.index, 'enablePlatformView': shouldUsePlatformView()}
-    });
+    await _channel.invokeMethod(
+      'createEngineWithProfile',
+      {
+        'profile': {
+          'appID': profile.appID,
+          'appSign': profile.appSign,
+          'scenario': profile.scenario.index,
+          'enablePlatformView': shouldUsePlatformView(),
+        }
+      },
+    );
 
-    await _channel.invokeMethod('setPluginVersion', {'version': Global.pluginVersion});
+    await _channel.invokeMethod(
+      'setPluginVersion',
+      {'version': Global.pluginVersion},
+    );
 
     isEngineCreated = true;
   }
@@ -1442,40 +1420,15 @@ class ZegoExpressImpl {
   }
 
   Future<ZegoScreenCaptureSource?> createScreenCaptureSource({int? sourceId, ZegoScreenCaptureSourceType? sourceType}) async {
-    int index = -1;
-    if (kIsAndroid || kIsIOS) {
-      index = 0;
-    } else {
-      if (kIsWeb) {
-        sourceType = ZegoScreenCaptureSourceType.Screen;
-      } else if (sourceId == null || sourceType == null) {
-        return null;
-      }
-      index = await _channel.invokeMethod('createScreenCaptureSource', {'sourceId': sourceId, 'sourceType': sourceType.index});
-    }
+    const index = 0;
+    ZegoScreenCaptureSourceImpl screenCaptureInstance = ZegoScreenCaptureSourceImpl(index);
+    screenCaptureSourceMap[index] = screenCaptureInstance;
 
-    if (index >= 0) {
-      ZegoScreenCaptureSourceImpl screenCaptureInstance = ZegoScreenCaptureSourceImpl(index);
-      screenCaptureSourceMap[index] = screenCaptureInstance;
-
-      return screenCaptureInstance;
-    } else {
-      return null;
-    }
+    return screenCaptureInstance;
   }
 
   Future<void> destroyScreenCaptureSource(ZegoScreenCaptureSource source) async {
-    int index = source.getIndex();
-
-    if (kIsAndroid || kIsIOS) {
-      index = 0;
-    } else {
-      await _channel.invokeMethod('destroyScreenCaptureSource', {'index': index});
-    }
-
-    screenCaptureSourceMap.remove(index);
-
-    return;
+    screenCaptureSourceMap.remove(0);
   }
 
   /* AIVoiceChanger */
@@ -2429,7 +2382,6 @@ class ZegoExpressImpl {
         break;
 
       default:
-        // TODO: Unknown callback
         break;
     }
   }
@@ -2733,7 +2685,7 @@ class ZegoAudioEffectPlayerImpl extends ZegoAudioEffectPlayer {
   Future<void> start(int audioEffectID, {String? path, ZegoAudioEffectPlayConfig? config}) async {
     if (path != null && path.contains('assets://')) {
       var assetPath = path.replaceAll('assets://', '');
-      path = Directory.systemTemp.absolute.path + '/' + assetPath;
+      path = '${Directory.systemTemp.absolute.path}/$assetPath';
       var file = File(path);
       if (!file.existsSync()) {
         file.createSync(recursive: true);
@@ -2817,7 +2769,7 @@ class ZegoAudioEffectPlayerImpl extends ZegoAudioEffectPlayer {
   Future<ZegoAudioEffectPlayerLoadResourceResult> loadResource(int audioEffectID, String path) async {
     if (path.contains('assets://')) {
       var assetPath = path.replaceAll('assets://', '');
-      path = Directory.systemTemp.absolute.path + '/' + assetPath;
+      path = '${Directory.systemTemp.absolute.path}/$assetPath';
       var file = File(path);
       if (!file.existsSync()) {
         file.createSync(recursive: true);
@@ -3056,12 +3008,6 @@ class ZegoCopyrightedMusicImpl extends ZegoCopyrightedMusic {
   }
 
   @override
-  Future<ZegoCopyrightedMusicGetMusicByTokenResult> getMusicByToken(String shareToken) async {
-    final Map<dynamic, dynamic> map = await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicGetMusicByToken', {'shareToken': shareToken});
-    return ZegoCopyrightedMusicGetMusicByTokenResult(map['errorCode'], map['resource']);
-  }
-
-  @override
   Future<int> getPreviousScore(String resourceID) async {
     return await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicGetPreviousScore', {'resourceID': resourceID});
   }
@@ -3090,35 +3036,6 @@ class ZegoCopyrightedMusicImpl extends ZegoCopyrightedMusic {
   @override
   Future<int> pauseScore(String resourceID) async {
     return await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicPauseScore', {'resourceID': resourceID});
-  }
-
-  @override
-  Future<bool> queryCache(String songID, ZegoCopyrightedMusicType type, {ZegoCopyrightedMusicVendorID? vendorID}) async {
-    return await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicQueryCache', {'songID': songID, 'type': type.index, 'vendorID': vendorID?.value});
-  }
-
-  @override
-  Future<ZegoCopyrightedMusicRequestAccompanimentResult> requestAccompaniment(ZegoCopyrightedMusicRequestConfig config) async {
-    final Map<dynamic, dynamic> map = await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicRequestAccompaniment', {
-      'config': {'songID': config.songID, 'mode': config.mode.index, 'vendorID': config.vendorID?.value ?? ZegoCopyrightedMusicVendorID.ZegoCopyrightedMusicVendorDefault.value, 'roomID': config.roomID ?? '', 'masterID': config.masterID ?? '', 'sceneID': config.sceneID ?? 0}
-    });
-    return ZegoCopyrightedMusicRequestAccompanimentResult(map['errorCode'], map['resource']);
-  }
-
-  @override
-  Future<ZegoCopyrightedMusicRequestAccompanimentClipResult> requestAccompanimentClip(ZegoCopyrightedMusicRequestConfig config) async {
-    final Map<dynamic, dynamic> map = await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicRequestAccompanimentClip', {
-      'config': {'songID': config.songID, 'mode': config.mode.index, 'vendorID': config.vendorID?.value ?? ZegoCopyrightedMusicVendorID.ZegoCopyrightedMusicVendorDefault.value, 'roomID': config.roomID ?? '', 'masterID': config.masterID ?? '', 'sceneID': config.sceneID ?? 0}
-    });
-    return ZegoCopyrightedMusicRequestAccompanimentClipResult(map['errorCode'], map['resource']);
-  }
-
-  @override
-  Future<ZegoCopyrightedMusicRequestSongResult> requestSong(ZegoCopyrightedMusicRequestConfig config) async {
-    final Map<dynamic, dynamic> map = await ZegoExpressImpl._channel.invokeMethod('copyrightedMusicRequestSong', {
-      'config': {'songID': config.songID, 'mode': config.mode.index, 'vendorID': config.vendorID?.value ?? ZegoCopyrightedMusicVendorID.ZegoCopyrightedMusicVendorDefault.value, 'roomID': config.roomID ?? '', 'masterID': config.masterID ?? '', 'sceneID': config.sceneID ?? 0}
-    });
-    return ZegoCopyrightedMusicRequestSongResult(map['errorCode'], map['resource']);
   }
 
   @override

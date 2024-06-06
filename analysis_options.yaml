@@ -3,3 +3,9 @@ include: package:flutter_lints/flutter.yaml
 linter:
   rules:
     provide_deprecation_message: true
+
+analyzer:
+  errors:
+    constant_identifier_names: ignore
+    non_constant_identifier_names: ignore
+

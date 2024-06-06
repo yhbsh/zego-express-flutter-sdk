@@ -1,19 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../zego_express_defines.dart';
-import '../utils/zego_express_utils.dart';
 import 'zego_express_impl.dart';
 
 class ZegoExpressTextureRenderer {
   factory ZegoExpressTextureRenderer() => _instance;
 
   void init() async {
-    if (!kIsWeb && !kIsAndroid) {
+    if (Platform.isIOS || Platform.isMacOS) {
       _streamSubscriptionTextureRendererController ??= _textureRendererControllerEvent.receiveBroadcastStream().listen(_textureRendererControllerEventListener);
     }
   }
@@ -23,7 +22,7 @@ class ZegoExpressTextureRenderer {
     _mirrorMap.clear();
     _sizeMap.clear();
     _viewModeMap.clear();
-    if (!kIsWeb && !kIsAndroid) {
+    if (Platform.isIOS || Platform.isMacOS) {
       await _streamSubscriptionTextureRendererController?.cancel();
       _streamSubscriptionTextureRendererController = null;
     }
@@ -40,7 +39,7 @@ class ZegoExpressTextureRenderer {
   /// If it returns false, it's probably because the `textureID` to be updated doesn't exist.
   /// Note: Only used by Android!
   Future<bool> updateTextureRendererSize(int textureID, int width, int height) async {
-    if (kIsAndroid) {
+    if (Platform.isAndroid) {
       return await ZegoExpressImpl.methodChannel.invokeMethod('updateTextureRendererSize', {'textureID': textureID, 'width': width, 'height': height});
     } else {
       return true;
@@ -55,10 +54,7 @@ class ZegoExpressTextureRenderer {
 
   void setViewMode(int textureID, ZegoViewMode viewMode) {
     if (_viewModeMap.containsKey(textureID) && _viewModeMap[textureID] != viewMode) {
-      _updateController.sink.add({
-        'textureID': textureID,
-        'type': 'update',
-      });
+      _updateController.sink.add({'textureID': textureID, 'type': 'update'});
     }
     _viewModeMap[textureID] = viewMode;
   }

@@ -56,12 +56,6 @@ class ZegoErrorCode {
   /// Description: Incorrect CDN address. <br>Cause: The set CDN URL is not a standard RTMP or FLV protocol. <br>Solutions: Please check the supported protocol and format.
   static const int CommonCdnUrlInvalid = 1000055;
 
-  /// DNS resolution failed. Please check network configurations. This error code is deprecated.
-  static const int CommonDnsResolveError = 1000060;
-
-  /// Server dispatching exception. Please contact ZEGO technical support to solve the problem. This error code is deprecated.
-  static const int CommonDispatchError = 1000065;
-
   /// Description: The engine audio and video module has been activated, and this setting is not supported. <br>Cause: Only supports setting before starting the audio and video module of the engine. <br>Solutions: Please set it before calling [startPreviewView] [startPublishingStream] [startPlayingStream] to start the audio and video module.
   static const int CommonConfigAfterEngineStarted = 1000066;
 
@@ -211,9 +205,6 @@ class ZegoErrorCode {
 
   /// Description: The room ID has been used by other login room interface. Current user can not login room with the room ID before release the room ID. <br>Cause: The room ID has been used by other login room interface. <br>Solutions: Logout the room with the same room ID first.
   static const int RoomRoomIdHasBeenUsed = 1002064;
-
-  /// Description: This method has been deprecated after version 2.9.0. <br>Cause: This method has been deprecated after version 2.9.0. <br>Solutions: Please set [setRoomMode] to select multi-room mode before the engine started, and then call [loginRoom] to use multi-room.
-  static const int RoomMultiRoomDeprecated = 1002065;
 
   /// Description: If the user is in the server blacklist when logging in to the room, this error code will be returned, indicating that it is forbidden to log in to the room. <br>Cause: The user is currently in the server blacklist. <br>Solutions: Please contact ZEGO technical support.
   static const int RoomUserInBlacklist = 1002066;
@@ -464,9 +455,6 @@ class ZegoErrorCode {
   /// Description: Failed to stop the stream mixing task. <br>Cause: May be the cause of the network error. <br>Solutions: Please check the network ring.
   static const int MixerStopRequestError = 1005011;
 
-  /// The stream mixing task must be stopped by the user who started the task. This error code is deprecated.
-  static const int MixerNotOwnerStopMixer = 1005012;
-
   /// Description: Starts stream mixing tasks too frequently. <br>Cause: Requests are too frequent, exceeding the qps limit of the service. <br>Solutions: Please ensure that the qps of the mixing request is less than 100.
   static const int MixerStartQpsOverload = 1005015;
 
@@ -598,12 +586,6 @@ class ZegoErrorCode {
 
   /// Description: Failed to set the beauty configuration. <br>Cause: The incoming beauty parameters are incorrect. <br>Solutions: Please check the passed in [ZegoBeautifyOption] type parameter.
   static const int PreprocessBeautifyOptionInvalid = 1007005;
-
-  /// The reverberation parameter is null. Please check the input parameter. This error code is deprecated.
-  static const int PreprocessReverbParamNull = 1007006;
-
-  /// The voice changer parameter is null. Please check the input parameter. This error code is deprecated.
-  static const int PreprocessVoiceChangerParamNull = 1007007;
 
   /// Description: Failed to set the reverberation parameters. <br>Cause: the reverberation room size parameter is invalid. <br>Solutions: The normal range of the reverberation room size parameter is 0.0 ~ 1.0
   static const int PreprocessReverbParamRoomSizeInvalid = 1007011;
@@ -823,12 +805,6 @@ class ZegoErrorCode {
 
   /// Description: The MediaDataPublisher instance is not created. <br>Cause: The MediaDataPublisher instance is not created. <br> Solutions: Call [createMediaDataPublisher] to create a media pusher instance.
   static const int MediaDataPublisherNoInstance = 1013000;
-
-  /// Description: This error code is deprecated. <br>Cause: None. <br> Solutions: None.
-  static const int MediaDataPublisherFileParseError = 1013001;
-
-  /// Description: This error code is deprecated. <br>Cause: None. <br> Solutions: None.
-  static const int MediaDataPublisherFilePathError = 1013002;
 
   /// Description: File decoding exception. <br>Cause: Invalid media file format. <br>Solutions: Please check the file is a valid media file or not; check the file format is in the MediaPlayer support file format list or not.
   static const int MediaDataPublisherFileCodecError = 1013003;

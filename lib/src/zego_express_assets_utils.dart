@@ -1,11 +1,3 @@
-//
-//  zego_express_assets_utils.dart.dart
-//  flutter
-//
-//  Created by Patrick Fu on 2020/09/27.
-//  Copyright © 2020 Zego. All rights reserved.
-//
-
 import 'impl/zego_express_impl.dart';
 import 'zego_express_api.dart';
 

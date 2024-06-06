@@ -1,22 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 
-// ignore_for_file: unnecessary_this, non_constant_identifier_names
-
 /// Room scenario.
 enum ZegoScenario {
-  /// [Deprecated] Legacy general scenario, this scenario has been deprecated since version 3.0.0, and it is not recommended to use, please migrate to other new scenario as soon as possible.
-  @Deprecated('Legacy general scenario')
-  General,
-
-  /// [Deprecated] Legacy communication scenario, this scenario has been deprecated since version 3.0.0, and it is not recommended to use, please migrate to other new scenario as soon as possible.
-  @Deprecated('Legacy communication scenario')
-  Communication,
-
-  /// [Deprecated] Legacy live broadcast scenario, this scenario has been deprecated since version 3.0.0, and it is not recommended to use, please migrate to other new scenario as soon as possible.
-  @Deprecated('Legacy live broadcast scenario')
-  Live,
-
   /// Available since: 3.0.0. Description: The default (generic) scenario. If none of the following scenarios conform to your actual application scenario, this default scenario can be used.
   Default,
 
@@ -496,10 +482,6 @@ enum ZegoAudioCaptureStereoMode {
 
   /// Always enable stereo capture.
   Always,
-
-  /// [Deprecated] Same as [Always], that is, always enable stereo capture, this mode has been deprecated since version 2.16.0.
-  @Deprecated('Same as [Always], that is, always enable stereo capture')
-  Adaptive
 }
 
 /// Audio mix mode.
@@ -1396,33 +1378,6 @@ enum ZegoCopyrightedMusicBillingMode {
   Master
 }
 
-/// The music resource type. For [querycache] interface.
-enum ZegoCopyrightedMusicType {
-  /// Song. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicSong,
-
-  /// Song with high quality. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicSongHQ,
-
-  /// Song with super quality. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicSongSQ,
-
-  /// Song accompaniment. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicAccompaniment,
-
-  /// Song accompaniment clip. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicAccompanimentClip,
-
-  /// Song accompaniment segment. Deprecated since version 3.9.0.
-  @Deprecated('Please use the [queryCache] interface that takes a ZegoCopyrightedMusicQueryCacheConfig as a parameter instead.')
-  ZegoCopyrightedMusicAccompanimentSegment
-}
-
 /// The music resource type. For [ZegoCopyrightedMusicRequestConfig], [ZegoCopyrightedMusicGetSharedConfig] and [ZegoCopyrightedMusicQueryCacheConfig].
 enum ZegoCopyrightedMusicResourceType {
   /// Song.
@@ -1661,34 +1616,6 @@ enum ZegoVideoSourceType {
 
   /// Video source from screen capture.
   ScreenCapture,
-
-  /// [Deprecated] this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Which video source to be used will determined by SDK')
-  ZegoVideoSourceDefault,
-
-  /// [Deprecated] Same as [Camera], that is, no capture, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [None], that is, no capture')
-  ZegoVideoSourceNone,
-
-  /// [Deprecated] Same as [Camera], that is, video source from camera, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [Camera], that is, video source from camera')
-  ZegoVideoSourceCamera,
-
-  /// [Deprecated] Same as [Custom], that is, video source from custom capture, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [Custom], that is, video source from custom capture')
-  ZegoVideoSourceExternalCapture,
-
-  /// [Deprecated] Same as [MainPublishChannel], that is, video source from the main publish channel, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [MainPublishChannel], that is, video source from the main publish channel')
-  ZegoVideoSourceMainPublishChannel,
-
-  /// [Deprecated] Same as [Player], that is, video source from media player, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [Player], that is, video source from media player')
-  ZegoVideoSourcePlayer,
-
-  /// [Deprecated] Same as [ScreenCapture], that is, video source from screen capture, this video source type has been deprecated since version 3.2.0.
-  @Deprecated('Same as [ScreenCapture], that is, video source from screen capture')
-  ZegoVideoSourceScreenCapture
 }
 
 /// Screen capture source exception type.
@@ -1952,7 +1879,6 @@ class ZegoEngineProfile {
 /// Advanced engine configuration.
 class ZegoEngineConfig {
   /// Log configuration, if not set, use the default configuration. It must be set before calling [createEngine] to take effect. If it is set after [createEngine], it will take effect at the next [createEngine] after [destroyEngine].
-  @Deprecated('This property has been deprecated since version 2.3.0, please use the [setLogConfig] function instead.')
   ZegoLogConfig? logConfig;
 
   /// Other special function switches, if not set, no special function will be used by default. Please contact ZEGO technical support before use.
@@ -2005,7 +1931,7 @@ class ZegoRoomConfig {
         token = "";
 
   Map<String, dynamic> toMap() {
-    return {'maxMemberCount': this.maxMemberCount, 'isUserStatusNotify': this.isUserStatusNotify, 'token': this.token};
+    return {'maxMemberCount': maxMemberCount, 'isUserStatusNotify': isUserStatusNotify, 'token': token};
   }
 }
 
@@ -2125,7 +2051,7 @@ class ZegoPublishDualStreamConfig {
   ZegoPublishDualStreamConfig(this.streamType, this.encodeWidth, this.encodeHeight, this.fps, this.bitrate);
 
   Map<String, dynamic> toMap() {
-    return {'streamType': this.streamType.index, 'encodeWidth': this.encodeWidth, 'encodeHeight': this.encodeHeight, 'fps': this.fps, 'bitrate': this.bitrate};
+    return {'streamType': streamType.index, 'encodeWidth': encodeWidth, 'encodeHeight': encodeHeight, 'fps': fps, 'bitrate': bitrate};
   }
 }
 
@@ -2223,7 +2149,7 @@ class ZegoUser {
   /// Create a ZegoUser object
   ///
   /// userName and userID are set to match
-  ZegoUser.id(this.userID) : this.userName = userID;
+  ZegoUser.id(this.userID) : userName = userID;
 }
 
 /// Stream object.
@@ -2279,9 +2205,9 @@ class ZegoCanvas {
 
   /// Create a ZegoCanvas, default viewMode is AspectFit, default background color is black
   ZegoCanvas.view(this.view)
-      : this.viewMode = ZegoViewMode.AspectFit,
-        this.backgroundColor = 0x000000,
-        this.alphaBlend = false;
+      : viewMode = ZegoViewMode.AspectFit,
+        backgroundColor = 0x000000,
+        alphaBlend = false;
 }
 
 /// Advanced publisher configuration.
@@ -2645,7 +2571,7 @@ class ZegoMixerAudioConfig {
         mixMode = ZegoAudioMixMode.Raw;
 
   Map<String, dynamic> toMap() {
-    return {'bitrate': this.bitrate, 'channel': this.channel.index, 'codecID': this.codecID.index, 'mixMode': this.mixMode.index};
+    return {'bitrate': bitrate, 'channel': channel.index, 'codecID': codecID.index, 'mixMode': mixMode.index};
   }
 }
 
@@ -2683,7 +2609,7 @@ class ZegoMixerVideoConfig {
         rateControlMode = ZegoVideoRateControlMode.ConstantRate;
 
   Map<String, dynamic> toMap() {
-    return {'width': this.width, 'height': this.height, 'fps': this.fps, 'bitrate': this.bitrate, 'quality': this.quality, 'rateControlMode': this.rateControlMode.index};
+    return {'width': width, 'height': height, 'fps': fps, 'bitrate': bitrate, 'quality': quality, 'rateControlMode': rateControlMode.index};
   }
 }
 
@@ -2733,7 +2659,7 @@ class ZegoFontStyle {
   ZegoFontStyle(this.type, this.size, this.color, this.transparency, this.border, this.borderColor);
 
   Map<String, dynamic> toMap() {
-    return {'type': this.type.index, 'size': this.size, 'color': this.color, 'transparency': this.transparency, 'border': this.border, 'borderColor': this.borderColor};
+    return {'type': type.index, 'size': size, 'color': color, 'transparency': transparency, 'border': border, 'borderColor': borderColor};
   }
 
   /// Create a default font style object.
@@ -2766,7 +2692,7 @@ class ZegoLabelInfo {
   ZegoLabelInfo(this.text, this.left, this.top, this.font);
 
   Map<String, dynamic> toMap() {
-    return {'text': this.text, 'left': this.left, 'top': this.top, 'font': this.font.toMap()};
+    return {'text': text, 'left': left, 'top': top, 'font': font.toMap()};
   }
 
   /// Build a label info object with text.
@@ -2792,7 +2718,7 @@ class ZegoMixerImageInfo {
   ZegoMixerImageInfo(this.url, {this.displayMode});
 
   Map<String, dynamic> toMap() {
-    return {'url': this.url, 'displayMode': this.displayMode};
+    return {'url': url, 'displayMode': displayMode};
   }
 }
 
@@ -2837,35 +2763,35 @@ class ZegoMixerInput {
 
   Map<String, dynamic> toMap() {
     return {
-      'streamID': this.streamID,
-      'contentType': this.contentType.index,
-      'left': this.layout.left.toInt(),
-      'top': this.layout.top.toInt(),
-      'right': this.layout.right.toInt(),
-      'bottom': this.layout.bottom.toInt(),
-      'soundLevelID': this.soundLevelID,
-      'volume': this.volume,
-      'isAudioFocus': this.isAudioFocus,
-      'audioDirection': this.audioDirection,
-      'label': this.label?.toMap(),
-      'renderMode': this.renderMode?.index,
-      'imageInfo': this.imageInfo?.toMap(),
-      'cornerRadius': this.cornerRadius
+      'streamID': streamID,
+      'contentType': contentType.index,
+      'left': layout.left.toInt(),
+      'top': layout.top.toInt(),
+      'right': layout.right.toInt(),
+      'bottom': layout.bottom.toInt(),
+      'soundLevelID': soundLevelID,
+      'volume': volume,
+      'isAudioFocus': isAudioFocus,
+      'audioDirection': audioDirection,
+      'label': label?.toMap(),
+      'renderMode': renderMode?.index,
+      'imageInfo': imageInfo?.toMap(),
+      'cornerRadius': cornerRadius
     };
   }
 
   ZegoMixerInput.defaultConfig()
-      : this.streamID = "",
-        this.contentType = ZegoMixerInputContentType.Video,
-        this.layout = const Rect.fromLTRB(0, 0, 0, 0),
-        this.soundLevelID = 0,
-        this.volume = 100,
-        this.isAudioFocus = false,
-        this.audioDirection = -1,
-        this.label = ZegoLabelInfo.text(""),
-        this.renderMode = ZegoMixRenderMode.Fill,
-        this.imageInfo = ZegoMixerImageInfo(""),
-        this.cornerRadius = 0;
+      : streamID = "",
+        contentType = ZegoMixerInputContentType.Video,
+        layout = const Rect.fromLTRB(0, 0, 0, 0),
+        soundLevelID = 0,
+        volume = 100,
+        isAudioFocus = false,
+        audioDirection = -1,
+        label = ZegoLabelInfo.text(""),
+        renderMode = ZegoMixRenderMode.Fill,
+        imageInfo = ZegoMixerImageInfo(""),
+        cornerRadius = 0;
 }
 
 /// Mixer output object, currently, a mixed-stream task only supports a maximum of four video streams with different resolutions.
@@ -2895,11 +2821,11 @@ class ZegoWatermark {
 
   Map<String, dynamic> toMap() {
     return {
-      'imageURL': this.imageURL,
-      'left': this.layout.left.toInt(),
-      'top': this.layout.top.toInt(),
-      'right': this.layout.right.toInt(),
-      'bottom': this.layout.bottom.toInt(),
+      'imageURL': imageURL,
+      'left': layout.left.toInt(),
+      'top': layout.top.toInt(),
+      'right': layout.right.toInt(),
+      'bottom': layout.bottom.toInt(),
     };
   }
 }
@@ -2943,13 +2869,13 @@ class ZegoMixerWhiteboard {
 
   Map<String, dynamic> toMap() {
     return {
-      'whiteboardID': this.whiteboardID,
-      'horizontalRatio': this.horizontalRatio,
-      'verticalRatio': this.verticalRatio,
-      'isPPTAnimation': this.isPPTAnimation,
-      'layout': {'top': this.layout.top.toInt(), 'left': this.layout.left.toInt(), 'right': this.layout.right.toInt(), 'bottom': this.layout.bottom.toInt()},
-      'zOrder': this.zOrder,
-      'backgroundColor': this.backgroundColor
+      'whiteboardID': whiteboardID,
+      'horizontalRatio': horizontalRatio,
+      'verticalRatio': verticalRatio,
+      'isPPTAnimation': isPPTAnimation,
+      'layout': {'top': layout.top.toInt(), 'left': layout.left.toInt(), 'right': layout.right.toInt(), 'bottom': layout.bottom.toInt()},
+      'zOrder': zOrder,
+      'backgroundColor': backgroundColor
     };
   }
 }
@@ -3019,20 +2945,20 @@ class ZegoMixerTask {
 
   Map<String, dynamic> toMap() {
     return {
-      'taskID': this.taskID,
-      'audioConfig': this.audioConfig.toMap(),
-      'videoConfig': this.videoConfig.toMap(),
-      'inputList': this.inputList,
-      'outputList': this.outputList,
-      'watermark': this.watermark.toMap(),
-      'whiteboard': this.whiteboard.toMap(),
-      'backgroundColor': this.backgroundColor,
-      'backgroundImageURL': this.backgroundImageURL,
-      'enableSoundLevel': this.enableSoundLevel,
-      'streamAlignmentMode': this.streamAlignmentMode.index,
-      'userData': this.userData,
-      'advancedConfig': this.advancedConfig,
-      'minPlayStreamBufferLength': this.minPlayStreamBufferLength
+      'taskID': taskID,
+      'audioConfig': audioConfig.toMap(),
+      'videoConfig': videoConfig.toMap(),
+      'inputList': inputList,
+      'outputList': outputList,
+      'watermark': watermark.toMap(),
+      'whiteboard': whiteboard.toMap(),
+      'backgroundColor': backgroundColor,
+      'backgroundImageURL': backgroundImageURL,
+      'enableSoundLevel': enableSoundLevel,
+      'streamAlignmentMode': streamAlignmentMode.index,
+      'userData': userData,
+      'advancedConfig': advancedConfig,
+      'minPlayStreamBufferLength': minPlayStreamBufferLength
     };
   }
 }
@@ -3095,7 +3021,7 @@ class ZegoAutoMixerTask {
   }
 
   Map<String, dynamic> toMap() {
-    return {'taskID': this.taskID, 'roomID': this.roomID, 'audioConfig': this.audioConfig.toMap(), 'outputList': this.outputList, 'enableSoundLevel': this.enableSoundLevel};
+    return {'taskID': taskID, 'roomID': roomID, 'audioConfig': audioConfig.toMap(), 'outputList': outputList, 'enableSoundLevel': enableSoundLevel};
   }
 }
 
@@ -3232,9 +3158,9 @@ class ZegoCustomAudioProcessConfig {
   ZegoCustomAudioProcessConfig(this.sampleRate, this.channel, this.samples);
 
   ZegoCustomAudioProcessConfig.defaultConfig()
-      : this.sampleRate = ZegoAudioSampleRate.Unknown,
-        this.channel = ZegoAudioChannel.Unknown,
-        this.samples = 0;
+      : sampleRate = ZegoAudioSampleRate.Unknown,
+        channel = ZegoAudioChannel.Unknown,
+        samples = 0;
 }
 
 /// Record config.
@@ -4828,71 +4754,6 @@ abstract class ZegoCopyrightedMusic {
   ///
   /// - [resourceID] the resource ID corresponding to the song or accompaniment.
   Future<int> getCurrentPitch(String resourceID);
-
-  /// [Deprecated] Request a song. Deprecated since 3.0.2, please use the [requestResource] function instead.
-  ///
-  /// Available since: 2.13.0
-  /// Description: By requesting a song, you can not only obtain basic information about a song (such as duration, song name, and artist), but also obtain the resource ID for local playback, share_token for sharing with others, and related authentication information. Support by the time, by the user monthly, by the room monthly subscription three ways.
-  /// Use case: Get copyrighted songs for local playback and sharing.
-  /// When to call: After initializing the copyrighted music success [initCopyrightedMusic].
-  /// Caution: This interface will trigger billing. A song may have three sound qualities: normal, high-definition, and lossless. Each sound quality has a different resource file, and each resource file has a unique resource ID.
-  ///
-  /// @deprecated Deprecated since 3.0.2, please use the [requestResource] function instead.
-  /// - [config] request configuration.
-  @Deprecated('Deprecated since 3.0.2, please use the [requestResource] function instead.')
-  Future<ZegoCopyrightedMusicRequestSongResult> requestSong(ZegoCopyrightedMusicRequestConfig config);
-
-  /// [Deprecated] Request accompaniment. Deprecated since 3.0.2, please use the [requestResource] function instead.
-  ///
-  /// Available since: 2.13.0
-  /// Description: You can get the accompaniment resources of the song corresponding to the songID, including resource_id, krc_token, share_token, etc. Supports click-by-point accompaniment.
-  /// Use case: Get copyrighted accompaniment for local playback and sharing.
-  /// When to call: After initializing the copyrighted music success [initCopyrightedMusic].
-  /// Caution: This interface will trigger billing.
-  ///
-  /// @deprecated Deprecated since 3.0.2, please use the [requestResource] function instead.
-  /// - [config] request configuration.
-  @Deprecated('Deprecated since 3.0.2, please use the [requestResource] function instead.')
-  Future<ZegoCopyrightedMusicRequestAccompanimentResult> requestAccompaniment(ZegoCopyrightedMusicRequestConfig config);
-
-  /// [Deprecated] Request accompaniment clip. Deprecated since 3.0.2, please use the [requestResource] function instead.
-  ///
-  /// Available since: 2.13.0
-  /// Description: You can get the accompaniment clip resources of the song corresponding to the songID, including resource_id, krc_token, share_token, etc. Supports accompaniment clips by pay-per-use.
-  /// Use case: Get copyrighted accompaniment clip for local playback and sharing.
-  /// When to call: After initializing the copyrighted music success [initCopyrightedMusic].
-  /// Caution: This interface will trigger billing.
-  ///
-  /// @deprecated Deprecated since 3.0.2, please use the [requestResource] function instead.
-  /// - [config] request configuration.
-  @Deprecated('Deprecated since 3.0.2, please use the [requestResource] function instead.')
-  Future<ZegoCopyrightedMusicRequestAccompanimentClipResult> requestAccompanimentClip(ZegoCopyrightedMusicRequestConfig config);
-
-  /// [Deprecated] Get a song or accompaniment. Deprecated since 3.0.2, please use the [getSharedResource] function instead.
-  ///
-  /// Available since: 2.13.0
-  /// Description: After the user successfully obtains the song/accompaniment/accompaniment clip resource, he can get the corresponding shareToken, share the shareToken with other users, and other users call this interface to obtain the shared music resources.
-  /// Use case: In the online KTV scene, after receiving the song or accompaniment token shared by the lead singer, the chorus obtains the corresponding song or accompaniment through this interface, and then plays it on the local end.
-  /// When to call: After initializing the copyrighted music success [initCopyrightedMusic].
-  ///
-  /// @deprecated Deprecated since 3.0.2, please use the [getSharedResource] function instead.
-  /// - [shareToken] access the corresponding authorization token for a song or accompaniment.
-  @Deprecated('Deprecated since 3.0.2, please use the [getSharedResource] function instead.')
-  Future<ZegoCopyrightedMusicGetMusicByTokenResult> getMusicByToken(String shareToken);
-
-  /// [Deprecated] Query the resource's cache is existed or not. Deprecated since 3.9.0, please use the method with the same name with [config] parameter instead.
-  ///
-  /// Available since: 3.2.1
-  /// Description: Query the resource is existed or not, query the Yinsuda resource cache by default
-  /// Use case: Can be used to check the resource's cache is existed or not
-  /// When to call: After initializing the copyrighted music success [initCopyrightedMusic].
-  ///
-  /// @deprecated Deprecated since 3.9.0, please use the method with the same name with [config] parameter instead.
-  /// - [songID] the ID of the song or accompaniment, the song and accompaniment of a song share the same ID.
-  /// - [type] the song resource type.
-  /// - [vendorID] Copyright music resource song copyright provider.
-  @Deprecated('Deprecated since 3.9.0, please use the method with the same name with [config] parameter instead.')
-  Future<bool> queryCache(String songID, ZegoCopyrightedMusicType type, {ZegoCopyrightedMusicVendorID? vendorID});
 }
 
 abstract class ZegoScreenCaptureSource {

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'zego_express_defines.dart';
 
 extension ZegoAudioSampleRateExtension on ZegoAudioSampleRate {
@@ -183,20 +181,6 @@ extension ZegoVideoSourceTypeExtension on ZegoVideoSourceType {
         return 5;
       case ZegoVideoSourceType.ScreenCapture:
         return 6;
-      case ZegoVideoSourceType.ZegoVideoSourceDefault:
-        return 7;
-      case ZegoVideoSourceType.ZegoVideoSourceNone:
-        return 8;
-      case ZegoVideoSourceType.ZegoVideoSourceCamera:
-        return 9;
-      case ZegoVideoSourceType.ZegoVideoSourceExternalCapture:
-        return 10;
-      case ZegoVideoSourceType.ZegoVideoSourceMainPublishChannel:
-        return 11;
-      case ZegoVideoSourceType.ZegoVideoSourcePlayer:
-        return 12;
-      case ZegoVideoSourceType.ZegoVideoSourceScreenCapture:
-        return 13;
     }
   }
 
@@ -214,22 +198,8 @@ extension ZegoVideoSourceTypeExtension on ZegoVideoSourceType {
         return ZegoVideoSourceType.Player;
       case 6:
         return ZegoVideoSourceType.ScreenCapture;
-      case 7:
-        return ZegoVideoSourceType.ZegoVideoSourceDefault;
-      case 8:
-        return ZegoVideoSourceType.ZegoVideoSourceNone;
-      case 9:
-        return ZegoVideoSourceType.ZegoVideoSourceCamera;
-      case 10:
-        return ZegoVideoSourceType.ZegoVideoSourceExternalCapture;
-      case 11:
-        return ZegoVideoSourceType.ZegoVideoSourceMainPublishChannel;
-      case 12:
-        return ZegoVideoSourceType.ZegoVideoSourcePlayer;
-      case 13:
-        return ZegoVideoSourceType.ZegoVideoSourceScreenCapture;
       default:
-        return ZegoVideoSourceType.ZegoVideoSourceDefault;
+        return ZegoVideoSourceType.None;
     }
   }
 }

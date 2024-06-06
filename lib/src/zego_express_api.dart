@@ -3,8 +3,6 @@ import 'impl/zego_express_impl.dart';
 import 'zego_express_defines.dart';
 import 'package:flutter/material.dart';
 
-// ignore_for_file: deprecated_member_use_from_same_package
-
 class ZegoExpressEngine {
   /// Private constructor
   ZegoExpressEngine._internal();
@@ -18,7 +16,7 @@ class ZegoExpressEngine {
   /// Description: Create ZegoExpressEngine singleton object and initialize SDK.
   /// When to call: The engine needs to be created before calling other functions.
   /// Restrictions: None.
-  /// Caution: The SDK only supports the creation of one instance of ZegoExpressEngine. If you need call [createEngine] multiple times, you need call [destroyEngine] before you call the next [createEngine]. Otherwise it will return the instance which created by [createEngine] you called last time.
+  /// Caution: The SDK only supports the creation of one instance of ZegoExpressEngine. If you need call [createEngineWithProfile] multiple times, you need call [destroyEngine] before you call the next [createEngineWithProfile]. Otherwise it will return the instance which created by [createEngineWithProfile] you called last time.
   ///
   /// - [profile] The basic configuration information is used to create the engine.
   static Future<void> createEngineWithProfile(ZegoEngineProfile profile) async {
@@ -31,7 +29,7 @@ class ZegoExpressEngine {
   /// Description: Destroy the ZegoExpressEngine singleton object and deinitialize the SDK.
   /// When to call: When the SDK is no longer used, the resources used by the SDK can be released through this interface
   /// Restrictions: None.
-  /// Caution: After using [createEngine] to create a singleton, if the singleton object has not been created or has been destroyed, you will not receive related callbacks when calling this function.
+  /// Caution: After using [createEngineWithProfile] to create a singleton, if the singleton object has not been created or has been destroyed, you will not receive related callbacks when calling this function.
   static Future<void> destroyEngine() async {
     return await ZegoExpressImpl.destroyEngine();
   }
@@ -52,7 +50,7 @@ class ZegoExpressEngine {
   ///
   /// Available since: 2.3.0
   /// Description: If you need to customize the log file size and path, please call this function to complete the configuration.
-  /// When to call: It must be set before calling [createEngine] to take effect. If it is set after [createEngine], it will take effect at the next [createEngine] after [destroyEngine].
+  /// When to call: It must be set before calling [createEngineWithProfile] to take effect. If it is set after [createEngineWithProfile], it will take effect at the next [createEngineWithProfile] after [destroyEngine].
   /// Restrictions: None.
   /// Caution: Once this interface is called, the method of setting log size and path via [setEngineConfig] will be invalid.Therefore, it is not recommended to use [setEngineConfig] to set the log size and path.
   ///
@@ -65,8 +63,8 @@ class ZegoExpressEngine {
   ///
   /// Available since: 3.1.0
   /// Description: If you need to use the local proxy feature, please call this function to complete the configuration.
-  /// When to call: Must be set before calling [createEngine] to take effect, otherwise it will fail.
-  /// Restrictions: After [createEngine], can not change the proxy.
+  /// When to call: Must be set before calling [createEngineWithProfile] to take effect, otherwise it will fail.
+  /// Restrictions: After [createEngineWithProfile], can not change the proxy.
   /// Caution: None.
   ///
   /// - [proxyList] proxy info.
@@ -79,8 +77,8 @@ class ZegoExpressEngine {
   ///
   /// Available since: 3.1.0
   /// Description: If you need to use the cloud proxy feature, please call this function to complete the configuration.
-  /// When to call: Must be set before calling [createEngine] to take effect, otherwise it will fail.
-  /// Restrictions: After [createEngine], can not change the proxy.
+  /// When to call: Must be set before calling [createEngineWithProfile] to take effect, otherwise it will fail.
+  /// Restrictions: After [createEngineWithProfile], can not change the proxy.
   /// Caution: None.
   ///
   /// - [proxyList] proxy info.
@@ -94,7 +92,7 @@ class ZegoExpressEngine {
   ///
   /// Available since: 3.5.0
   /// Description: This function needs to be called to complete the configuration when using License authentication charges.
-  /// When to call: Must be set before calling [createEngine] to take effect, otherwise it will fail.
+  /// When to call: Must be set before calling [createEngineWithProfile] to take effect, otherwise it will fail.
   /// Restrictions: Does not support midway changes.
   /// Caution: None.
   ///
@@ -107,7 +105,7 @@ class ZegoExpressEngine {
   ///
   /// Available since: 2.9.0
   /// Description: If you need to use the multi-room feature, please call this function to complete the configuration.
-  /// When to call: Must be set before calling [createEngine] to take effect, otherwise it will fail.
+  /// When to call: Must be set before calling [createEngineWithProfile] to take effect, otherwise it will fail.
   /// Restrictions: If you need to use the multi-room feature, please contact the instant technical support to configure the server support.
   /// Caution: None.
   ///
@@ -120,7 +118,7 @@ class ZegoExpressEngine {
   ///
   /// Available since: 3.4.0
   /// Description: If you need to use the geo fence feature, please call this function to complete the configuration.
-  /// When to call: Must be set before calling [createEngine] to take effect, otherwise it will fail.
+  /// When to call: Must be set before calling [createEngineWithProfile] to take effect, otherwise it will fail.
   /// Restrictions: If you need to use the geo fence feature, please contact ZEGO Technical Support.
   /// Caution: None.
   ///
@@ -161,14 +159,14 @@ class ZegoExpressEngine {
   /// Set room scenario.
   ///
   /// Available since: 3.0.0
-  /// Description: You can set the scenario of the room, and the SDK will adopt different optimization strategies for different scenarios in order to obtain better effects; this function does exactly the same thing as the [scenario] parameter in the [profile] configuration of [createEngine].
+  /// Description: You can set the scenario of the room, and the SDK will adopt different optimization strategies for different scenarios in order to obtain better effects; this function does exactly the same thing as the [scenario] parameter in the [profile] configuration of [createEngineWithProfile].
   /// Use cases: This function is suitable for apps in various audio and video business scenarios, such as 1v1 video call (or voice call) scenario and live show scenario; this function can be used to switch scenarios without destroying the engine through [destroyEngine].
-  /// When to call: Must be set before calling [loginRoom] AND after calling [createEngine].
+  /// When to call: Must be set before calling [loginRoom] AND after calling [createEngineWithProfile].
   /// Restrictions: Once you log in to the room, you are no longer allowed to modify the room scenario. If you need to modify the scenario, you need to log out of the room first. If you log in to multiple rooms, you need to log out of all rooms before you can modify it.
   /// Caution:
   ///   1. Users in the same room are recommended to use the same room scenario for best results.
   ///   2. Setting the scenario will affect the audio and video bit rate, frame rate, resolution, codec id, audio device mode, audio route type, traffic control, 3A, ear return and other audio and video configurations. If you have special needs, you can call various other APIs to set the above configuration after calling this API.
-  ///   3. Calling this function will override the scenario specified on [createEngine] or the scenario set by the last call to this function.
+  ///   3. Calling this function will override the scenario specified on [createEngineWithProfile] or the scenario set by the last call to this function.
   ///   4. Calling this function will overwrite the audio and video related configuration you set through APIs such as [setVideoConfig], [setAudioConfig], so it is recommended to set the scenario first and then adjust the audio and video configuration through other APIs.
   ///
   /// - [scenario] Room scenario.
@@ -181,9 +179,9 @@ class ZegoExpressEngine {
   /// Available since: 1.1.0
   /// Description: By default, SDK creates and prints log files in the App's default directory. Each log file defaults to a maximum of 5MB. Three log files are written over and over in a circular fashion. When calling this function, SDK will auto package and upload the log files to the ZEGO server.
   /// Use cases: Developers can provide a business “feedback” channel in the App. When users feedback problems, they can call this function to upload the local log information of SDK to help locate user problems.
-  /// When to call: After [createEngine].
+  /// When to call: After [createEngineWithProfile].
   /// Restrictions:  The frequency limit is once per minute.
-  /// Caution: 1.After calling this interface to upload logs, if you call [destroyEngine] or exit the App too quickly, there may be a failure.It is recommended to wait a few seconds, and then call [destroyEngine] or exit the App after receiving the upload success callback. 2.If you want to call before [createEngine], use the [submitLog] interface.
+  /// Caution: 1.After calling this interface to upload logs, if you call [destroyEngine] or exit the App too quickly, there may be a failure.It is recommended to wait a few seconds, and then call [destroyEngine] or exit the App after receiving the upload success callback. 2.If you want to call before [createEngineWithProfile], use the [submitLog] interface.
   Future<void> uploadLog() async {
     return await ZegoExpressImpl.instance.uploadLog();
   }
@@ -195,7 +193,7 @@ class ZegoExpressEngine {
   /// Use cases: Developers can provide a business “feedback” channel in the App. When users feedback problems, they can call this function to upload the local log information of SDK to help locate user problems.
   /// When to call: None.
   /// Restrictions: The frequency limit is once per minute.
-  /// Caution: 1.After calling this interface to upload logs, if you call [destroyEngine] or exit the App too quickly, there may be a failure.It is recommended to wait a few seconds, and then call [destroyEngine] or exit the App after receiving the upload success callback. 2.It is supported to call before [createEngine]. If it had called [createEngine] before, the last appid will be used to upload the log, otherwise the log will not be uploaded until the next [createEngine].
+  /// Caution: 1.After calling this interface to upload logs, if you call [destroyEngine] or exit the App too quickly, there may be a failure.It is recommended to wait a few seconds, and then call [destroyEngine] or exit the App after receiving the upload success callback. 2.It is supported to call before [createEngineWithProfile]. If it had called [createEngineWithProfile] before, the last appid will be used to upload the log, otherwise the log will not be uploaded until the next [createEngineWithProfile].
   static Future<void> submitLog() async {
     return await ZegoExpressImpl.submitLog();
   }
@@ -205,7 +203,7 @@ class ZegoExpressEngine {
   /// Available since: 2.17.0
   /// Description: After enabled, the SDK will print logs to the console, and will pop-up an alert (toast) UI message when there is a problem with calling other SDK functions.
   /// Default value: This function is disabled by default.
-  /// When to call: This function can be called right after [createEngine].
+  /// When to call: This function can be called right after [createEngineWithProfile].
   /// Platform differences: The pop-up alert function only supports Android / iOS / macOS / Windows, and the console log function supports all platforms.
   /// Caution: Be sure to confirm that this feature is turned off before the app is released to avoid pop-up UI alert when an error occurs in your release version's app. It is recommended to associate the [enable] parameter of this function with the DEBUG variable of the app, that is, only enable the debug assistant in the DEBUG environment.
   /// Restrictions: None.
@@ -219,7 +217,7 @@ class ZegoExpressEngine {
   ///
   /// Available since: 2.7.0
   /// Description: ZEGO provides some technical previews or special customization functions in RTC business through this API. If you need to get the use of the function or the details, please consult ZEGO technical support.
-  /// When to call: After [createEngine].
+  /// When to call: After [createEngineWithProfile].
   ///
   /// - [params] Parameters in the format of a JSON string, please consult ZEGO technical support for details.
   /// - Returns Returns an argument in the format of a JSON string, please consult ZEGO technical support for details.
@@ -674,7 +672,7 @@ class ZegoExpressEngine {
   /// Trigger: After the [startPlayingStream] function is called successfully, when the remote stream sends SEI, the local end will receive this callback.
   /// Caution:
   ///  1. This function will switch the UI thread callback data, and the customer can directly operate the UI control in this callback function.
-  ///  2. Since the video encoder itself generates an SEI with a payload type of 5, or when a video file is used for publishing, such SEI may also exist in the video file. Therefore, if the developer needs to filter out this type of SEI, it can be before [createEngine] Call [ZegoEngineConfig.advancedConfig("unregister_sei_filter", "XXXXX")]. Among them, unregister_sei_filter is the key, and XXXXX is the uuid filter string to be set.
+  ///  2. Since the video encoder itself generates an SEI with a payload type of 5, or when a video file is used for publishing, such SEI may also exist in the video file. Therefore, if the developer needs to filter out this type of SEI, it can be before [createEngineWithProfile] Call [ZegoEngineConfig.advancedConfig("unregister_sei_filter", "XXXXX")]. Among them, unregister_sei_filter is the key, and XXXXX is the uuid filter string to be set.
   ///  3. When [mutePlayStreamVideo] or [muteAllPlayStreamVideo] is called to set only the audio stream to be pulled, the SEI will not be received.
   ///
   /// - [streamID] Stream ID.
@@ -686,7 +684,7 @@ class ZegoExpressEngine {
   /// Available since: 3.9.0
   /// Description: After the [startPlayingStream] function is called successfully, when the remote stream sends SEI (such as directly calling [sendSEI], audio mixing with SEI data, and sending custom video capture encoded data with SEI, etc.), the local end will receive this callback.
   /// Trigger: After the [startPlayingStream] function is called successfully, when the remote stream sends SEI, the local end will receive this callback.
-  /// Caution: 1. Since the video encoder itself generates an SEI with a payload type of 5, or when a video file is used for publishing, such SEI may also exist in the video file. Therefore, if the developer needs to filter out this type of SEI, it can be before [createEngine] Call [ZegoEngineConfig.advancedConfig("unregister_sei_filter", "XXXXX")]. Among them, unregister_sei_filter is the key, and XXXXX is the uuid filter string to be set. 2. When [mutePlayStreamVideo] or [muteAllPlayStreamVideo] is called to set only the audio stream to be pulled, the SEI will not be received.
+  /// Caution: 1. Since the video encoder itself generates an SEI with a payload type of 5, or when a video file is used for publishing, such SEI may also exist in the video file. Therefore, if the developer needs to filter out this type of SEI, it can be before [createEngineWithProfile] Call [ZegoEngineConfig.advancedConfig("unregister_sei_filter", "XXXXX")]. Among them, unregister_sei_filter is the key, and XXXXX is the uuid filter string to be set. 2. When [mutePlayStreamVideo] or [muteAllPlayStreamVideo] is called to set only the audio stream to be pulled, the SEI will not be received.
   ///
   /// - [info] SEI Callback info.
   static void Function(ZegoMediaSideInfo info)? onPlayerRecvMediaSideInfo;
@@ -1182,7 +1180,7 @@ class ZegoExpressEngine {
   /// Available since: 1.19.0
   /// Description: System performance monitoring callback. The callback notification period is the value of millisecond parameter set by call [startPerformanceMonitor].
   /// Use cases: Monitor system performance can help user quickly locate and solve performance problems and improve user experience.
-  /// When to trigger: It will triggered after [createEngine], and call [startPerformanceMonitor] to start system performance monitoring.
+  /// When to trigger: It will triggered after [createEngineWithProfile], and call [startPerformanceMonitor] to start system performance monitoring.
   /// Restrictions: None.
   ///
   /// - [status] System performance monitoring status.
@@ -1246,7 +1244,7 @@ class ZegoExpressEngine {
   /// Successful callback of network time synchronization.
   ///
   /// Available since: 2.12.0
-  /// This callback is triggered when internal network time synchronization completes after a developer calls [createEngine].
+  /// This callback is triggered when internal network time synchronization completes after a developer calls [createEngineWithProfile].
   static void Function()? onNetworkTimeSynchronized;
 
   /// Request to dump data.
@@ -1505,62 +1503,4 @@ class ZegoExpressEngine {
   /// - [errorCode] Error code, please refer to the error codes document https://docs.zegocloud.com/en/5548.html for details.
   /// - [speakerList] Available speaker list.
   static void Function(ZegoAIVoiceChanger aiVoiceChanger, int errorCode, List<ZegoAIVoiceChangerSpeakerInfo> speakerList)? onAIVoiceChangerGetSpeakerList;
-
-  /// [Deprecated] Create ZegoExpressEngine singleton object and initialize SDK. Deprecated since 2.14.0, please use the method with the same name without [isTestEnv] parameter instead. Please refer to [Testing environment deprecation](https://docs.zegocloud.com/article/13315) for more details.
-  ///
-  /// Available: 1.1.0 ~ 2.13.1, deprecated since 2.14.0, please use the method with the same name without [isTestEnv] parameter instead
-  /// Description: Create ZegoExpressEngine singleton object and initialize SDK.
-  /// When to call: The engine needs to be created before calling other functions.
-  /// Restrictions: None.
-  /// Caution: The SDK only supports the creation of one instance of ZegoExpressEngine. If you need call [createEngine] multiple times, you need call [destroyEngine] before you call the next [createEngine]. Otherwise it will return the instance which created by [createEngine] you called last time.
-  ///
-  /// @deprecated Deprecated since 2.14.0, please use the method with the same name without [isTestEnv] parameter instead.
-  /// - [appID] Application ID issued by ZEGO for developers, please apply from the ZEGO Admin Console https://console.zegocloud.com The value ranges from 0 to 4294967295.
-  /// - [appSign] Application signature for each AppID, please apply from the ZEGO Admin Console. Application signature is a 64 character string. Each character has a range of '0' ~ '9', 'a' ~ 'z'. AppSign 2.17.0 and later allows null or no transmission. If the token is passed empty or not passed, the token must be entered in the [ZegoRoomConfig] parameter for authentication when the [loginRoom] interface is called to login to the room.
-  /// - [isTestEnv] [Deprecated] For providing better and more standardized services, starting from 2021-11-16, ZEGO no longer classifies environments into production environments and testing environments. f you create your project in ZEGO Admin Console on/before 2021-11-16, refer to [Testing environment deprecation](https://docs.zegocloud.com/article/13315) to upgrade the SDK and adjust related codes.
-  /// - [scenario] The room scenario. the SDK will optimize the audio and video configuration for the specified scenario to achieve the best effect in this scenario. After specifying the scenario, you can call other APIs to adjusting the audio and video configuration. Differences between scenarios and how to choose a suitable scenario, please refer to https://docs.zegocloud.com/article/14940
-  /// - [enablePlatformView] Set whether to use Platform View for rendering, true: rendering using Platform View, false: rendering using Texture, default is false. Currently the web platform only supports rendering with Platform View. When using the [createCanvasView] interface, If the preferred render mode is not supported, another render mode is automatically used.
-  @Deprecated('Deprecated since 2.14.0, please use the method with the same name without [isTestEnv] parameter instead.')
-  static Future<void> createEngine(int appID, String appSign, bool isTestEnv, ZegoScenario scenario, {bool? enablePlatformView}) async {
-    return await ZegoExpressImpl.createEngine(appID, appSign, isTestEnv, scenario, enablePlatformView: enablePlatformView);
-  }
-}
-
-extension ZegoExpressEngineDeprecatedApi on ZegoExpressEngine {
-  /// [Deprecated] Enables or disables the beauty features for the specified publish channel. Deprecated since 2.16.0, please use the [enableEffectsBeauty] function instead.
-  ///
-  /// Available since: 1.1.0
-  /// Description: When developers do not have much need for beauty features, they can use this function to set some very simple beauty effects.
-  /// When to call: It needs to be called after [createEngine].
-  /// Default value: When this function is not called, the beauty feature is not enabled by default.
-  /// Related APIs: After turning on the beauty features, you can call the [setBeautifyOption] function to adjust the beauty parameters.
-  /// Caution: This beauty feature is very simple and may not meet the developer’s expectations. It is recommended to use the custom video processing function [enableCustomVideoProcessing] or the custom video capture function [enableCustomVideoCapture] to connect the [ZegoEffects] AI SDK https://docs.zegocloud.com/article/9896 for best results.
-  /// Restrictions: In the case of using the custom video capture function, since the developer has handle the video data capturing, the SDK is no longer responsible for the video data capturing, so this function is no longer valid. It is also invalid when using the custom video processing function.
-  /// Note: This function is only available in ZegoExpressVideo SDK!
-  ///
-  /// @deprecated Deprecated since 2.16.0, please use the [enableEffectsBeauty] function instead.
-  /// - [featureBitmask] Beauty features, bitmask format, you can choose to enable several features in [ZegoBeautifyFeature] at the same time
-  /// - [channel] Publishing stream channel
-  @Deprecated('Deprecated since 2.16.0, please use the [enableEffectsBeauty] function instead.')
-  Future<void> enableBeautify(int featureBitmask, {ZegoPublishChannel? channel}) async {
-    return await ZegoExpressImpl.instance.enableBeautify(featureBitmask, channel: channel);
-  }
-
-  /// [Deprecated] Set beautify option. Deprecated since 2.16.0, please use the [setEffectsBeautyParam] function instead.
-  ///
-  /// Available since: 1.1.0
-  /// Description: set beautify option for main publish channel.
-  /// Use cases: Often used in video call, live broadcasting.
-  /// When to call: It needs to be called after [createEngine].
-  /// Restrictions: None.
-  /// Caution: In the case of using a custom video capture function, because the developer has taken over the video data capturing, the SDK is no longer responsible for the video data capturing, call this function will not take effect. When using custom video processing, the video data collected by the SDK will be handed over to the business for further processing, call this function will not take effect either.
-  /// Note: This function is only available in ZegoExpressVideo SDK!
-  ///
-  /// @deprecated Deprecated since 2.16.0, please use the [setEffectsBeautyParam] function instead.
-  /// - [option] Beautify option.
-  /// - [channel] stream publish channel.
-  @Deprecated('Deprecated since 2.16.0, please use the [setEffectsBeautyParam] function instead.')
-  Future<void> setBeautifyOption(ZegoBeautifyOption option, {ZegoPublishChannel? channel}) async {
-    return await ZegoExpressImpl.instance.setBeautifyOption(option, channel: channel);
-  }
 }
